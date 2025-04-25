@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Linux 常用命令 1、查看进程所在的核ID号 1 2 3 4 pidof a.out # 获取pid ps -o pid,psr,comm -p &lt;pid&gt; taskset -c -p &lt;pid&gt; top -p &lt;pid&gt; # 按f进入菜单，空格键选择P，ESC退出，在最后一栏显示cpuid 2、显示终端输入过的命令 1 2 history # 每个命令都有一个命令号id，输入：!id 即输入该id对应的命令 3、进程绑定cpu 1 2 3 numactl --hardware #查看cpu numactl --show numastat 4、shell获取当前目录 1 2 CURRENT_DIR=$(cd $(dirname $0);pwd) echo ${CURRENT_DIR} 5、获取程序运行时间 第一种方法 1 2 3 4 5 6 7 8 9 #include &lt;sys/time.h&gt; struct timeval startTime, endTime; float timeUsed; gettimeofday(&amp;startTime, NULL); ... gettimeofday(&amp;endTime, NULL); timeUsed = 1000000 * (endTime.tv_sec - startTime.tv_sec) + (endTime.tv_usec - startTime.tv_usec); timeUsed /= 1000000; printf(&#34;total times:[%f]s\\n&#34;, timeUsed); 第二种方法 1 2 3 4 5 #include &lt;time.h&gt; clock_t start = clock(); // the code need to measure time clock_t end = clock(); double timeSpend = (double)(end - start) / CLOCKS_PER_SEC; //得到的结果是秒，(end-start)得到的结果是毫秒，不适用于多线程场合 第三种方法 1 2 3 4 #include &lt;Windows.h&gt; DWORD start = GetTickCount(); DWORD end = GetTickCount(); DWORD timeSpend = end - start; //得到的结果是毫秒 第四种方法 1 2 3 4 5 6 7 8 9 #include &lt;Windows.h&gt; LARGE_INTEGER t1,t2,tc; QueryPerformanceFrequency(&amp;tc); QueryPerformanceCounter(&amp;t1); ... QueryPerformanceCounter(&amp;t2); double time=(double)(t2.QuadPart-t1.QuadPart)/(double)tc.QuadPart; printf(&#34;total times:[%lf] ms\\n&#34;, time * 1000);//ms (double)tc.QuadPart: 10 000 000 6、mpich命令 1 2 3 4 5 #mpiexec -l -hosts cn0,cn1 -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ mpiexec -l -f ./machinefile -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore4/host_code/ ./vec_add_host 24 :\\ -wdir ./armcore8/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore12/host_code/ ./vec_add_host 1024 24 其中machinefile内容为：\n">
+<title>Linux 常用命令</title>
+
+<link rel='canonical' href='https://xenithya.github.io/p/linux-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Linux 常用命令">
+<meta property='og:description' content="Linux 常用命令 1、查看进程所在的核ID号 1 2 3 4 pidof a.out # 获取pid ps -o pid,psr,comm -p &lt;pid&gt; taskset -c -p &lt;pid&gt; top -p &lt;pid&gt; # 按f进入菜单，空格键选择P，ESC退出，在最后一栏显示cpuid 2、显示终端输入过的命令 1 2 history # 每个命令都有一个命令号id，输入：!id 即输入该id对应的命令 3、进程绑定cpu 1 2 3 numactl --hardware #查看cpu numactl --show numastat 4、shell获取当前目录 1 2 CURRENT_DIR=$(cd $(dirname $0);pwd) echo ${CURRENT_DIR} 5、获取程序运行时间 第一种方法 1 2 3 4 5 6 7 8 9 #include &lt;sys/time.h&gt; struct timeval startTime, endTime; float timeUsed; gettimeofday(&amp;startTime, NULL); ... gettimeofday(&amp;endTime, NULL); timeUsed = 1000000 * (endTime.tv_sec - startTime.tv_sec) + (endTime.tv_usec - startTime.tv_usec); timeUsed /= 1000000; printf(&#34;total times:[%f]s\\n&#34;, timeUsed); 第二种方法 1 2 3 4 5 #include &lt;time.h&gt; clock_t start = clock(); // the code need to measure time clock_t end = clock(); double timeSpend = (double)(end - start) / CLOCKS_PER_SEC; //得到的结果是秒，(end-start)得到的结果是毫秒，不适用于多线程场合 第三种方法 1 2 3 4 #include &lt;Windows.h&gt; DWORD start = GetTickCount(); DWORD end = GetTickCount(); DWORD timeSpend = end - start; //得到的结果是毫秒 第四种方法 1 2 3 4 5 6 7 8 9 #include &lt;Windows.h&gt; LARGE_INTEGER t1,t2,tc; QueryPerformanceFrequency(&amp;tc); QueryPerformanceCounter(&amp;t1); ... QueryPerformanceCounter(&amp;t2); double time=(double)(t2.QuadPart-t1.QuadPart)/(double)tc.QuadPart; printf(&#34;total times:[%lf] ms\\n&#34;, time * 1000);//ms (double)tc.QuadPart: 10 000 000 6、mpich命令 1 2 3 4 5 #mpiexec -l -hosts cn0,cn1 -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ mpiexec -l -f ./machinefile -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore4/host_code/ ./vec_add_host 24 :\\ -wdir ./armcore8/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore12/host_code/ ./vec_add_host 1024 24 其中machinefile内容为：\n">
+<meta property='og:url' content='https://xenithya.github.io/p/linux-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/'>
+<meta property='og:site_name' content='Xenithya的博客'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-04-25T16:10:29&#43;08:00'/><meta property='article:modified_time' content='2025-04-25T16:10:29&#43;08:00'/>
+<meta name="twitter:title" content="Linux 常用命令">
+<meta name="twitter:description" content="Linux 常用命令 1、查看进程所在的核ID号 1 2 3 4 pidof a.out # 获取pid ps -o pid,psr,comm -p &lt;pid&gt; taskset -c -p &lt;pid&gt; top -p &lt;pid&gt; # 按f进入菜单，空格键选择P，ESC退出，在最后一栏显示cpuid 2、显示终端输入过的命令 1 2 history # 每个命令都有一个命令号id，输入：!id 即输入该id对应的命令 3、进程绑定cpu 1 2 3 numactl --hardware #查看cpu numactl --show numastat 4、shell获取当前目录 1 2 CURRENT_DIR=$(cd $(dirname $0);pwd) echo ${CURRENT_DIR} 5、获取程序运行时间 第一种方法 1 2 3 4 5 6 7 8 9 #include &lt;sys/time.h&gt; struct timeval startTime, endTime; float timeUsed; gettimeofday(&amp;startTime, NULL); ... gettimeofday(&amp;endTime, NULL); timeUsed = 1000000 * (endTime.tv_sec - startTime.tv_sec) + (endTime.tv_usec - startTime.tv_usec); timeUsed /= 1000000; printf(&#34;total times:[%f]s\\n&#34;, timeUsed); 第二种方法 1 2 3 4 5 #include &lt;time.h&gt; clock_t start = clock(); // the code need to measure time clock_t end = clock(); double timeSpend = (double)(end - start) / CLOCKS_PER_SEC; //得到的结果是秒，(end-start)得到的结果是毫秒，不适用于多线程场合 第三种方法 1 2 3 4 #include &lt;Windows.h&gt; DWORD start = GetTickCount(); DWORD end = GetTickCount(); DWORD timeSpend = end - start; //得到的结果是毫秒 第四种方法 1 2 3 4 5 6 7 8 9 #include &lt;Windows.h&gt; LARGE_INTEGER t1,t2,tc; QueryPerformanceFrequency(&amp;tc); QueryPerformanceCounter(&amp;t1); ... QueryPerformanceCounter(&amp;t2); double time=(double)(t2.QuadPart-t1.QuadPart)/(double)tc.QuadPart; printf(&#34;total times:[%lf] ms\\n&#34;, time * 1000);//ms (double)tc.QuadPart: 10 000 000 6、mpich命令 1 2 3 4 5 #mpiexec -l -hosts cn0,cn1 -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ mpiexec -l -f ./machinefile -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore4/host_code/ ./vec_add_host 24 :\\ -wdir ./armcore8/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore12/host_code/ ./vec_add_host 1024 24 其中machinefile内容为：\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_612b06fbf331ef43.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Xenithya的博客</a></h1>
+            <h2 class="site-description">欢迎来到我的博客网站</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>档案</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#linux-常用命令">Linux 常用命令</a>
+      <ol>
+        <li><a href="#1查看进程所在的核id号">1、查看进程所在的核ID号</a></li>
+        <li><a href="#2显示终端输入过的命令">2、显示终端输入过的命令</a></li>
+        <li><a href="#3进程绑定cpu">3、进程绑定cpu</a></li>
+        <li><a href="#4shell获取当前目录">4、shell获取当前目录</a></li>
+        <li><a href="#5获取程序运行时间">5、获取程序运行时间</a></li>
+        <li><a href="#6mpich命令">6、mpich命令</a></li>
+        <li><a href="#7免密登录">7、免密登录</a></li>
+        <li><a href="#8创建新用户及用户权限">8、创建新用户及用户权限</a></li>
+        <li><a href="#9vim删除多行">9、vim删除多行</a></li>
+        <li><a href="#10linux新建用户组权限">10、linux新建用户组权限</a></li>
+        <li><a href="#11编译内核">11、编译内核</a></li>
+        <li><a href="#12按时间列举目录下文件">12、按时间列举目录下文件</a></li>
+        <li><a href="#13dd复制硬盘">13、DD复制硬盘</a></li>
+        <li><a href="#14shell脚本获取当前路径">14、shell脚本获取当前路径</a></li>
+        <li><a href="#15查看文件夹大小">15、查看文件夹大小</a></li>
+        <li><a href="#16查看文件夹下有多少个文件">16、查看文件夹下有多少个文件</a></li>
+        <li><a href="#17环境变量">17、环境变量</a></li>
+        <li><a href="#18网络bind-error">18、网络bind error</a></li>
+        <li><a href="#19查看内核版本">19、查看内核版本</a></li>
+        <li><a href="#20查看cpu个数及核心数">20、查看cpu个数及核心数</a></li>
+        <li><a href="#21设置堆栈大小">21、设置堆栈大小</a></li>
+        <li><a href="#22mkstemp">22、mkstemp</a></li>
+        <li><a href="#23查看内核版本号">23、查看内核版本号</a></li>
+        <li><a href="#24lspci--k">24、lspci -k</a></li>
+        <li><a href="#25系统时间设置">25、系统时间设置</a></li>
+        <li><a href="#26查找指定字符串">26、查找指定字符串</a></li>
+        <li><a href="#27开机自动加载模块">27、开机自动加载模块</a></li>
+        <li><a href="#28编译成模块">28、编译成模块</a></li>
+        <li><a href="#29卸载pci设备">29、卸载PCI设备</a></li>
+        <li><a href="#30vscode添加头部注释">30、vscode添加头部注释</a></li>
+        <li><a href="#31linux-c内存泄漏检查">31、Linux C内存泄漏检查</a></li>
+        <li><a href="#32linux程序前台后台切换">32、Linux程序前台后台切换</a></li>
+        <li><a href="#33任意类型循环左右移位n位">33、任意类型循环左右移位n位</a></li>
+        <li><a href="#34lspci--vv">34、lspci -vv</a></li>
+        <li><a href="#35__builtin_popcount">35、__builtin_popcount</a></li>
+        <li><a href="#36绑定cpu的c代码实现">36、绑定CPU的C代码实现</a></li>
+        <li><a href="#37cgroup执行命令">37、cgroup执行命令</a></li>
+        <li><a href="#38binbash有字符r无法解析">38、/bin/bash有字符&rsquo;\r&rsquo;无法解析</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/linux-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">Linux 常用命令</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Apr 25, 2025</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="linux-常用命令">Linux 常用命令
+</h2><h3 id="1查看进程所在的核id号">1、查看进程所在的核ID号
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> pidof a.out   <span class="c1"># 获取pid</span>
+</span></span><span class="line"><span class="cl"> ps -o pid,psr,comm -p &lt;pid&gt;
+</span></span><span class="line"><span class="cl"> taskset -c -p &lt;pid&gt;
+</span></span><span class="line"><span class="cl"> top -p &lt;pid&gt;  <span class="c1"># 按f进入菜单，空格键选择P，ESC退出，在最后一栏显示cpuid</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2显示终端输入过的命令">2、显示终端输入过的命令
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> <span class="nb">history</span> 
+</span></span><span class="line"><span class="cl"> <span class="c1"># 每个命令都有一个命令号id，输入：!id 即输入该id对应的命令</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3进程绑定cpu">3、进程绑定cpu
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> numactl --hardware  <span class="c1">#查看cpu</span>
+</span></span><span class="line"><span class="cl"> numactl --show
+</span></span><span class="line"><span class="cl"> numastat
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="4shell获取当前目录">4、shell获取当前目录
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> <span class="nv">CURRENT_DIR</span><span class="o">=</span><span class="k">$(</span><span class="nb">cd</span> <span class="k">$(</span>dirname <span class="nv">$0</span><span class="k">)</span><span class="p">;</span><span class="nb">pwd</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl"> <span class="nb">echo</span> <span class="si">${</span><span class="nv">CURRENT_DIR</span><span class="si">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="5获取程序运行时间">5、获取程序运行时间
+</h3><ul>
+<li>第一种方法</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"> <span class="cp">#include</span> <span class="cpf">&lt;sys/time.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span> <span class="k">struct</span> <span class="n">timeval</span> <span class="n">startTime</span><span class="p">,</span> <span class="n">endTime</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> <span class="kt">float</span> <span class="n">timeUsed</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> <span class="nf">gettimeofday</span><span class="p">(</span><span class="o">&amp;</span><span class="n">startTime</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"> <span class="p">...</span>
+</span></span><span class="line"><span class="cl"> <span class="nf">gettimeofday</span><span class="p">(</span><span class="o">&amp;</span><span class="n">endTime</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"> <span class="n">timeUsed</span> <span class="o">=</span> <span class="mi">1000000</span> <span class="o">*</span> <span class="p">(</span><span class="n">endTime</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">.</span><span class="n">tv_sec</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">endTime</span><span class="p">.</span><span class="n">tv_usec</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">.</span><span class="n">tv_usec</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"> <span class="n">timeUsed</span> <span class="o">/=</span> <span class="mi">1000000</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;total times:[%f]s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">timeUsed</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>第二种方法</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"> <span class="cp">#include</span> <span class="cpf">&lt;time.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span> <span class="kt">clock_t</span> <span class="n">start</span> <span class="o">=</span> <span class="nf">clock</span><span class="p">();</span>    <span class="c1">// the code need to measure time    
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="kt">clock_t</span> <span class="n">end</span> <span class="o">=</span> <span class="nf">clock</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"> <span class="kt">double</span> <span class="n">timeSpend</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="n">CLOCKS_PER_SEC</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"> <span class="c1">//得到的结果是秒，(end-start)得到的结果是毫秒，不适用于多线程场合
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>第三种方法</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"> <span class="cp">#include</span> <span class="cpf">&lt;Windows.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span> <span class="n">DWORD</span> <span class="n">start</span> <span class="o">=</span> <span class="nf">GetTickCount</span><span class="p">();</span> 
+</span></span><span class="line"><span class="cl"> <span class="n">DWORD</span> <span class="n">end</span> <span class="o">=</span> <span class="nf">GetTickCount</span><span class="p">();</span>    
+</span></span><span class="line"><span class="cl"> <span class="n">DWORD</span> <span class="n">timeSpend</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">;</span>    <span class="c1">//得到的结果是毫秒
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>第四种方法</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"> <span class="cp">#include</span> <span class="cpf">&lt;Windows.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span> <span class="n">LARGE_INTEGER</span> <span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">,</span><span class="n">tc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">QueryPerformanceFrequency</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">QueryPerformanceCounter</span><span class="p">(</span><span class="o">&amp;</span><span class="n">t1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"> <span class="p">...</span>
+</span></span><span class="line"><span class="cl"> <span class="nf">QueryPerformanceCounter</span><span class="p">(</span><span class="o">&amp;</span><span class="n">t2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">time</span><span class="o">=</span><span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">t2</span><span class="p">.</span><span class="n">QuadPart</span><span class="o">-</span><span class="n">t1</span><span class="p">.</span><span class="n">QuadPart</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">tc</span><span class="p">.</span><span class="n">QuadPart</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"> <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;total times:[%lf] ms</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">time</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">);</span><span class="c1">//ms
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">tc</span><span class="p">.</span><span class="nl">QuadPart</span><span class="p">:</span> <span class="mi">10</span> <span class="mo">000</span> <span class="mo">000</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="6mpich命令">6、mpich命令
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> <span class="c1">#mpiexec -l -hosts cn0,cn1 -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\</span>
+</span></span><span class="line"><span class="cl"> mpiexec -l -f ./machinefile  -wdir ./armcore0/host_code/ ./vec_add_host <span class="m">1024</span> <span class="m">24</span> :<span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -wdir ./armcore4/host_code/ ./vec_add_host <span class="m">24</span> :<span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -wdir ./armcore8/host_code/ ./vec_add_host <span class="m">1024</span> <span class="m">24</span> :<span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -wdir ./armcore12/host_code/ ./vec_add_host <span class="m">1024</span> <span class="m">24</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中machinefile内容为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> cn0:1
+</span></span><span class="line"><span class="cl"> cn1:1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>表示cn0执行这4个程序一遍，如果machinefile中的内容为cn0:4则表示执行这4个程序4遍。</p>
+<p>machinefile也可以用</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">-hosts cn0,cn1 -n <span class="m">8</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>代替。</p>
+<h3 id="7免密登录">7、免密登录
+</h3><p>免密登录本地：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ssh localhost
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ssh-keygen -t rsa
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>生成之后会在用户的根目录生成一个 “.ssh”的文件夹，文件夹下有这几个文件</p>
+<ul>
+<li>
+<p>id_rsa : 生成的私钥文件
+　　</p>
+</li>
+<li>
+<p>id_rsa.pub ： 生成的公钥文件</p>
+</li>
+<li>
+<p>know_hosts : 已知的主机公钥清单</p>
+</li>
+</ul>
+<p>本地生成的公钥添加到目标服务器的 authorized_keys 文件中</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#ssh-copy-id 将key写到远程机器的～/.ssh/authorized_keys文件中</span>
+</span></span><span class="line"><span class="cl">ssh-copy-id -i .ssh/id_rsa.pub xyy@172.168.0.11
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>登录远程机器</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ssh root@172.168.0.11
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="8创建新用户及用户权限">8、创建新用户及用户权限
+</h3><ul>
+<li>增加用户：</li>
+</ul>
+<p>(1)在root权限下</p>
+<p>命令：useradd +用户名，它不会在/home目录下创建同名文件夹，也没有创建密码，因此利用这个用户登录系统，是登录不了的；</p>
+<p>命令：useradd -m +用户名，将在/home目录下创建同名文件夹，然后利用（ passwd + 用户名）为指定的用户名设置密码。</p>
+<p>useradd选项:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">-c   <span class="c1"># comment 指定一段注释性描述。</span>
+</span></span><span class="line"><span class="cl">-d   <span class="c1"># 目录 指定用户主目录，如果此目录不存在，则同时使用-m选项，可以创建主目录。</span>
+</span></span><span class="line"><span class="cl">-g   <span class="c1"># 用户组 指定用户所属的用户组。</span>
+</span></span><span class="line"><span class="cl">-G   <span class="c1"># 用户组，用户组 指定用户所属的附加组。</span>
+</span></span><span class="line"><span class="cl">-s   <span class="c1"># Shell文件 指定用户的登录Shell。</span>
+</span></span><span class="line"><span class="cl">-u   <span class="c1"># 用户号 指定用户的用户号，如果同时有-o选项，则可以重复使用其他用户的标识号。</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>(2)命令：adduser +用户名，在/home目录下会自动创建同名文件夹</p>
+<p>创建新用户后，同时会在etc目录下的passwd文件中添加这个新用户的相关信息</p>
+<p>创建新用户后shell无法自动补全命令或使用基本的shell命令</p>
+<p>按照上述命令创建一个新用户后，提示符仅仅是一个$，输入命令，用TAB键也无法补全命令。并且没有命令历史功能。</p>
+<p>使用root用户查看passwd文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">grep 用户名 /etc/passwd
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以发现默认的shell 是/bin/sh，将其修改为/bin/bash 后即可</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">vi /etc/passwd
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>删除用户：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">userdel username
+</span></span><span class="line"><span class="cl"><span class="c1">#若想将它在系统上的文件也删除掉，使用命令：</span>
+</span></span><span class="line"><span class="cl">userdel -r username
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>修改用户参数：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">usermod --help  <span class="c1"># 查看修改用户这个命令的相关参数</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>用户的相互切换：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">su 用户名  <span class="c1"># su是switch user的缩写，表示用户切换</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>用户组的添加和删除：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">groupadd testgroup <span class="c1"># 组的添加</span>
+</span></span><span class="line"><span class="cl">groupdel testgroup <span class="c1"># 组的删除</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明：组的增加和删除信息会在etc目录的group文件中体现出来。</p>
+<p>示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> useradd -m xyy
+</span></span><span class="line"><span class="cl"> passwd xyy
+</span></span><span class="line"><span class="cl"> chown -R xyy ./xyy
+</span></span><span class="line"><span class="cl"> chgrp -R xyy ./xyy/
+</span></span><span class="line"><span class="cl"> vim /etc/passwd  <span class="c1"># 将其修改为/bin/bash 后即可</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="9vim删除多行">9、vim删除多行
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> 9,12d
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="10linux新建用户组权限">10、linux新建用户组权限
+</h3><p>比如找不到root下安装好的mpi</p>
+<p>方法：修改在xyy用户下的.bashrc文件，将路径添加到末尾，再source .bashrc即可。</p>
+<h3 id="11编译内核">11、编译内核
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> make mrproper   <span class="c1"># 清空一些配置信息检查源码是否完整</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在当前目录下执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">    make  <span class="c1"># 相当于make bzImage加make modules）</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">## 另外make可以加-j 20  意思启动20个线程编译</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    make modules           <span class="c1">#生成相应的模块</span>
+</span></span><span class="line"><span class="cl">    make modules_install   <span class="c1">#将相应的模块拷贝到对应的目录下</span>
+</span></span><span class="line"><span class="cl">    make install           <span class="c1">#该命令的作用是将.config，vmlinuz，initrd.img，System.map文件到/boot/目录、更新grub。默认启动新内核</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>配置内核</li>
+</ul>
+<p>在正式编译内核之前，我们首先必须配置需要包含哪些模块。实际上，有一些非常简单的方式来配置。使用一个命令，你能拷贝当前内核的配置文件，然后使用可靠的 menuconfig 命令来做任何必要的更改。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cp /boot/config-<span class="k">$(</span>uname -r<span class="k">)</span> .config
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上述命令的意思就是拷贝对应当前内核配置到当前目录下并重命名为.config(文件名前加.意思为隐藏文件)。</p>
+<p>可以自行查看下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">uname -r
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>的输出</p>
+<p>之后执行命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">make menuconfig
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>生成的配置文件在</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">/home/sys/linux-4.19.46-mt/.config 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>编译和安装</li>
+</ul>
+<p>退出menuconfig后，在命令行中输入</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">make -j4
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>命令即可开始编译。-j4意思是并发执行，可以提高速度，一般情况 下不要多于CPU核数。这个命令的执行会耗费很长时间。</p>
+<p>编译完成之后首先安装模块，命令为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo make modules_install
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>安装内核，
+命令为：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo make install
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>回到顶部
+启用内核作为引导，输入下列命令将内核作为引导，将数字更改为你自己编译的版本号：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo update-initramfs -c -k 5.3.10
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>下面更新一下grub：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo update-grub
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>之后重启即可在启动界面选择需要启动的内核。如果看不到启动选择界面，请执行以下操作：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo vi /etc/default/grub
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>将文件修改为以下模式：（注释掉hidden那一行，将timeout更改为较大值，这里改为了10）之后执行</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo update-grub
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>自定义grub启动项</li>
+</ul>
+<p>修改启动项名称:</p>
+<p>在ubuntu下，可以直接修改/boot/grub/grub.cfg中有关启动项的名称。</p>
+<ul>
+<li>增加自定义启动项</li>
+</ul>
+<p>复制/boot/grub/grub.cfg有关启动项的内容到/etc/grub.d/40_custom进行自定义即可。</p>
+<ul>
+<li>执行update</li>
+</ul>
+<p>最后都要执行下述命令以生效。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo update-grub
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="12按时间列举目录下文件">12、按时间列举目录下文件
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> ll -rt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="13dd复制硬盘">13、DD复制硬盘
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#查看硬盘盘符：</span>
+</span></span><span class="line"><span class="cl">fdisk -l<span class="p">|</span>grep /dev/sd
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#格式化硬盘：</span>
+</span></span><span class="line"><span class="cl">mkfs.ext4 /dev/sdn <span class="c1"># n=要格式的盘id</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#拷贝硬盘：</span>
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/dev/sdj <span class="nv">of</span><span class="o">=</span>/dev/sdk <span class="nv">bs</span><span class="o">=</span>64M
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="14shell脚本获取当前路径">14、shell脚本获取当前路径
+</h3><ul>
+<li>方法一</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> <span class="c1">#!/usr/bin/env bash</span>
+</span></span><span class="line"><span class="cl"> <span class="nv">Cur_Dir</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl"> <span class="nb">echo</span> <span class="nv">$Cur_Dir</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>方法二</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> <span class="c1">#!/usr/bin/env bash</span>
+</span></span><span class="line"><span class="cl"> <span class="nv">basedir</span><span class="o">=</span><span class="nb">cd</span> <span class="k">$(</span>dirname <span class="nv">$0</span><span class="k">)</span><span class="p">;</span> <span class="nb">pwd</span> -P
+</span></span><span class="line"><span class="cl"> <span class="nb">echo</span> <span class="nv">$basedir</span>
+</span></span><span class="line"><span class="cl"> <span class="c1"># dirname $0，取得当前执行的脚本文件的父目录</span>
+</span></span><span class="line"><span class="cl"> <span class="c1"># cd dirname $0，进入这个目录(切换当前工作目录)</span>
+</span></span><span class="line"><span class="cl"> <span class="c1"># pwd，显示当前工作目录(cd执行后的)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="15查看文件夹大小">15、查看文件夹大小
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">du -h –max-depth<span class="o">=</span><span class="m">1</span> /var/log/*
+</span></span><span class="line"><span class="cl">du -sh /*
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="16查看文件夹下有多少个文件">16、查看文件夹下有多少个文件
+</h3><ul>
+<li>查看目录下有多少个文件及文件夹需在终端输入</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ls <span class="p">|</span> wc -w
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>查看目录下有多少个文件需在终端输入</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ls <span class="p">|</span> wc -c
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>查看文件夹下有多少个文件，多少个子目录需在终端输入</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ls -l <span class="p">|</span>wc -l
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>若只想知道文件的个数，则需在终端输入</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">/bin/ls -l <span class="p">|</span>grep ^-<span class="p">|</span>wc -l
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="17环境变量">17、环境变量
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">/etc/profile.d 
+</span></span><span class="line"><span class="cl"><span class="c1"># 用户每次登录，会执行该文件夹下的所有.sh文件</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="18网络bind-error">18、网络bind error
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># Address already in use</span>
+</span></span><span class="line"><span class="cl">netstat -tanlp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="19查看内核版本">19、查看内核版本
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat /etc/issue
+</span></span><span class="line"><span class="cl">cat /proc/version
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="20查看cpu个数及核心数">20、查看cpu个数及核心数
+</h3><p>总核数 = 物理CPU个数 X 每颗物理CPU的核数
+总逻辑CPU数 = 物理CPU个数 X 每颗物理CPU的核数 X 超线程数</p>
+<ul>
+<li>查看物理CPU个数</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat /proc/cpuinfo<span class="p">|</span> grep <span class="s2">&#34;physical id&#34;</span><span class="p">|</span> sort<span class="p">|</span> uniq<span class="p">|</span> wc -l
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>查看每个物理CPU中core的个数(即核数)</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat /proc/cpuinfo<span class="p">|</span> grep <span class="s2">&#34;cpu cores&#34;</span><span class="p">|</span> uniq
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>查看逻辑CPU的个数</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat /proc/cpuinfo<span class="p">|</span> grep <span class="s2">&#34;processor&#34;</span><span class="p">|</span> wc -l
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>查看线程数</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">grep <span class="s1">&#39;processor&#39;</span> /proc/cpuinfo <span class="p">|</span> sort -u <span class="p">|</span> wc -l    
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意，此处查看的线程数是总的线程数，可以理解为逻辑cpu的数量</p>
+<h3 id="21设置堆栈大小">21、设置堆栈大小
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"> <span class="cp">#include</span> <span class="cpf">&lt;sys/resource.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="k">struct</span> <span class="n">rlimit</span> <span class="n">rlim</span><span class="p">,</span> <span class="n">rlim_new</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">getrlimit</span><span class="p">(</span><span class="n">RLIMIT_STACK</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rlim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;****** [%d]: %ld %ld ******</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">__LINE__</span><span class="p">,</span> <span class="n">rlim</span><span class="p">.</span><span class="n">rlim_cur</span><span class="p">,</span> <span class="n">rlim</span><span class="p">.</span><span class="n">rlim_max</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// rlim_new.rlim_cur = rlim_new.rlim_max = RLIM_INFINITY;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">rlim_new</span><span class="p">.</span><span class="n">rlim_cur</span> <span class="o">=</span> <span class="n">rlim_new</span><span class="p">.</span><span class="n">rlim_max</span> <span class="o">=</span> <span class="n">rlim</span><span class="p">.</span><span class="n">rlim_cur</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nf">setrlimit</span><span class="p">(</span><span class="n">RLIMIT_STACK</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rlim_new</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">rlim_new</span><span class="p">.</span><span class="n">rlim_cur</span> <span class="o">=</span> <span class="n">rlim_new</span><span class="p">.</span><span class="n">rlim_max</span> <span class="o">=</span> <span class="n">rlim</span><span class="p">.</span><span class="n">rlim_max</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="nf">setrlimit</span><span class="p">(</span><span class="n">RLIMIT_STACK</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rlim_new</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">getrlimit</span><span class="p">(</span><span class="n">RLIMIT_STACK</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rlim</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;****** [%d]: %ld %ld ******</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">__LINE__</span><span class="p">,</span> <span class="n">rlim</span><span class="p">.</span><span class="n">rlim_cur</span><span class="p">,</span> <span class="n">rlim</span><span class="p">.</span><span class="n">rlim_max</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="22mkstemp">22、mkstemp
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">int</span> <span class="nf">mkstemp</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span> <span class="n">template</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>函数说明：</p>
+<p>mkstemp()用来建立唯一的临时文件. 参数template 所指的文件名称字符串中最后六个字符必须是XXXXXX.</p>
+<p>mkstemp()会以可读写模式和0600 权限来打开该文件, 如果该文件不存在则会建立该文件. 打开该文件后其文件描述词会返回.</p>
+<p>文件顺利打开后返回可读写的文件描述词. 若果文件打开失败则返回NULL, 并把错误代码存在errno 中.</p>
+<p>错误代码：EINVAL 参数template 字符串最后六个字符非XXXXXX. EEXIST 无法建立临时文件.</p>
+<h3 id="23查看内核版本号">23、查看内核版本号
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">uname -r
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="24lspci--k">24、lspci -k
+</h3><p>选项表示输出信息中显示正在使用的驱动和内核中可以支持该设备的模块。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">lspci -k -s 08:00.0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="25系统时间设置">25、系统时间设置
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">date <span class="m">1118184321</span>
+</span></span><span class="line"><span class="cl"> <span class="c1">#  11 18 18 43 21</span>
+</span></span><span class="line"><span class="cl"> <span class="c1">#  月 日 时 分 年</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="26查找指定字符串">26、查找指定字符串
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">grep -rn reserve_all_mem_mt_safe
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="27开机自动加载模块">27、开机自动加载模块
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">depmod
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>将需要加载的.ko文件放到</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">/lib/modules/<span class="k">$(</span>uname -r<span class="k">)</span>/update
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>新建的文件夹下</p>
+<p>然后执行depmod即可，在</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">/lib/modules/<span class="k">$(</span>uname -r<span class="k">)</span>/modules.dep
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>文件中能看到需要加载的.ko文件
+或在</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">/etc/rc.local
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>文件中添加</p>
+<h3 id="28编译成模块">28、编译成模块
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">make -C /home/sys/linux-4.19.46-mt/ <span class="nv">M</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span> modules
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="29卸载pci设备">29、卸载PCI设备
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="m">1</span> &gt; /sys/bus/pci/device/0000<span class="se">\:</span>03<span class="se">\:</span>00.0/remove
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重新对PCI/PCIe总线进行枚举，可执行命令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="m">1</span> &gt; /sys/bus/pci/rescan
+</span></span><span class="line"><span class="cl"><span class="nv">$make</span> modules
+</span></span><span class="line"><span class="cl"><span class="nv">$sudo</span> make modules_install
+</span></span><span class="line"><span class="cl"><span class="nv">$sudo</span> make install
+</span></span><span class="line"><span class="cl">update-initramfs: Generating /boot/initrd.img-4.19.46-vfio-1119+
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="30vscode添加头部注释">30、vscode添加头部注释
+</h3><ul>
+<li>
+<p>搜索 fileheader</p>
+</li>
+<li>
+<p>安装 koroFileHeader</p>
+</li>
+<li>
+<p>修改 设置-&gt;fileheader-&gt;config obj-&gt;setting.json</p>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ctrl + alt + i  <span class="c1"># 生成头部注释</span>
+</span></span><span class="line"><span class="cl">ctrl + alt + t  <span class="c1"># 生成函数注释</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="31linux-c内存泄漏检查">31、Linux C内存泄漏检查
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">valgrind --tool<span class="o">=</span>memcheck --leak-check<span class="o">=</span>full ./test
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="32linux程序前台后台切换">32、Linux程序前台后台切换
+</h3><ul>
+<li>在Linux终端运行命令的时候，在命令末尾加上 &amp; 符号，就可以让程序在后台运行</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root@Ubuntu$ ./tcpserv01 <span class="p">&amp;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>如果程序正在前台运行，可以使用 Ctrl+z 选项把程序暂停，然后用 bg %[number] 命令把这个程序放到后台运行，摁Ctrl+z，然后在最后一行加上</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">bg</span> %number
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>对于所有运行的程序，我们可以用jobs –l 指令查看</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="o">[</span>kettle@4 data-integration<span class="o">]</span>$ <span class="nb">jobs</span> -l
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>也可以用 fg %[number] 指令把一个程序掉到前台</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> cat@Ubuntu:~/unp/unpv13e/tcpcliserv$ <span class="nb">fg</span> %1
+</span></span><span class="line"><span class="cl"> ./tcpserv01
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>也可以直接终止后台运行的程序，使用 kill 命令</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat@Ubuntu:~/unp/unpv13e/tcpcliserv$ <span class="nb">kill</span> %1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="33任意类型循环左右移位n位">33、任意类型循环左右移位n位
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cp">#define LOGIC_LSHIFT_NBIT_TYPE(data, nbit, type) ((type)((data &gt;&gt; (sizeof(type) &lt;&lt; 3) - nbit) | (data &lt;&lt; nbit)))
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define LOGIC_RSHIFT_NBIT_TYPE(data, nbit, type) ((type)((data &lt;&lt; (sizeof(type) &lt;&lt; 3) - nbit) | (data &gt;&gt; nbit)))
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define LOGIC_RSHIFT_NVLAN(data, nbit) ((data | (1 &lt;&lt; (nbit))) | 0xFFFFFFF)
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="34lspci--vv">34、lspci -vv
+</h3><p>Linux 中用于显示 PCI/PCIe 设备超详细硬件信息的命令</p>
+<h3 id="35__builtin_popcount">35、__builtin_popcount
+</h3><p>GCC 编译器中四个重要的内置函数之一。__builtin_popcount(x)：该函数用于计算一个整数的个数(设置位)。</p>
+<h3 id="36绑定cpu的c代码实现">36、绑定CPU的C代码实现
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cp">#define _GNU_SOURCE
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sched.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">set_CPU_affinity</span><span class="p">(</span><span class="kt">int</span> <span class="n">core_id</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">cpu_set_t</span> <span class="n">mask</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">CPU_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mask</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">CPU_SET</span><span class="p">(</span><span class="n">core_id</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">mask</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">sched_setaffinity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">cpu_set_t</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">mask</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">get_CPU_affinity</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">cpu_set_t</span> <span class="n">get</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">CPU_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">get</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">sched_getaffinity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">get</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">get</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="c1">//获取线程CPU亲和力  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="p">{</span>  
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;warning: cound not get thread affinity, continuing...</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>  
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>  
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>  
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>  
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nf">CPU_ISSET</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">get</span><span class="p">))</span><span class="c1">//判断线程与哪个CPU有亲和力  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">{</span>  
+</span></span><span class="line"><span class="cl">            <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;this thread %d is running processor : %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">);</span>  
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>  
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="37cgroup执行命令">37、cgroup执行命令
+</h3><p>使用 Linux ​cgroups（控制组）​来限制进程 CPU 资源</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cgexec -g cpu:test_cpu ./a.out
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="38binbash有字符r无法解析">38、/bin/bash有字符&rsquo;\r&rsquo;无法解析
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">vi hello.sh 
+</span></span><span class="line"><span class="cl"><span class="c1">### Esc进入命令行运行模式</span>
+</span></span><span class="line"><span class="cl"><span class="c1">### : set ff=unix</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2025 Xun Yingya
+    </section>
+    
+    <section class="powerby">
+        
+            Xenithya的个人博客 <br/>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
