@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Linux 常用命令 1、查看进程所在的核ID号 1 2 3 4 pidof a.out # 获取pid ps -o pid,psr,comm -p &lt;pid&gt; taskset -c -p &lt;pid&gt; top -p &lt;pid&gt; # 按f进入菜单，空格键选择P，ESC退出，在最后一栏显示cpuid 2、显示终端输入过的命令 1 2 history # 每个命令都有一个命令号id，输入：!id 即输入该id对应的命令 3、进程绑定cpu 1 2 3 numactl --hardware #查看cpu numactl --show numastat 4、shell获取当前目录 1 2 CURRENT_DIR=$(cd $(dirname $0);pwd) echo ${CURRENT_DIR} 5、获取程序运行时间 第一种方法 1 2 3 4 5 6 7 8 9 #include &lt;sys/time.h&gt; struct timeval startTime, endTime; float timeUsed; gettimeofday(&amp;startTime, NULL); ... gettimeofday(&amp;endTime, NULL); timeUsed = 1000000 * (endTime.tv_sec - startTime.tv_sec) + (endTime.tv_usec - startTime.tv_usec); timeUsed /= 1000000; printf(&#34;total times:[%f]s\\n&#34;, timeUsed); 第二种方法 1 2 3 4 5 #include &lt;time.h&gt; clock_t start = clock(); // the code need to measure time clock_t end = clock(); double timeSpend = (double)(end - start) / CLOCKS_PER_SEC; //得到的结果是秒，(end-start)得到的结果是毫秒，不适用于多线程场合 第三种方法 1 2 3 4 #include &lt;Windows.h&gt; DWORD start = GetTickCount(); DWORD end = GetTickCount(); DWORD timeSpend = end - start; //得到的结果是毫秒 第四种方法 1 2 3 4 5 6 7 8 9 #include &lt;Windows.h&gt; LARGE_INTEGER t1,t2,tc; QueryPerformanceFrequency(&amp;tc); QueryPerformanceCounter(&amp;t1); ... QueryPerformanceCounter(&amp;t2); double time=(double)(t2.QuadPart-t1.QuadPart)/(double)tc.QuadPart; printf(&#34;total times:[%lf] ms\\n&#34;, time * 1000);//ms (double)tc.QuadPart: 10 000 000 6、mpich命令 1 2 3 4 5 #mpiexec -l -hosts cn0,cn1 -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ mpiexec -l -f ./machinefile -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore4/host_code/ ./vec_add_host 24 :\\ -wdir ./armcore8/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore12/host_code/ ./vec_add_host 1024 24 其中machinefile内容为：\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Linux 常用命令 查看进程所在的核ID号 1 2 3 4 pidof a.out # 获取pid ps -o pid,psr,comm -p &lt;pid&gt; taskset -c -p &lt;pid&gt; top -p &lt;pid&gt; # 按f进入菜单，空格键选择P，ESC退出，在最后一栏显示cpuid 显示终端输入过的命令 1 2 history # 每个命令都有一个命令号id，输入：!id 即输入该id对应的命令 进程绑定cpu 1 2 3 numactl --hardware #查看cpu numactl --show numastat shell获取当前目录 1 2 CURRENT_DIR=$(cd $(dirname $0);pwd) echo ${CURRENT_DIR} 获取程序运行时间 第一种方法 1 2 3 4 5 6 7 8 9 #include &lt;sys/time.h&gt; struct timeval startTime, endTime; float timeUsed; gettimeofday(&amp;startTime, NULL); ... gettimeofday(&amp;endTime, NULL); timeUsed = 1000000 * (endTime.tv_sec - startTime.tv_sec) + (endTime.tv_usec - startTime.tv_usec); timeUsed /= 1000000; printf(&#34;total times:[%f]s\\n&#34;, timeUsed); 第二种方法 1 2 3 4 5 #include &lt;time.h&gt; clock_t start = clock(); // the code need to measure time clock_t end = clock(); double timeSpend = (double)(end - start) / CLOCKS_PER_SEC; //得到的结果是秒，(end-start)得到的结果是毫秒，不适用于多线程场合 第三种方法 1 2 3 4 #include &lt;Windows.h&gt; DWORD start = GetTickCount(); DWORD end = GetTickCount(); DWORD timeSpend = end - start; //得到的结果是毫秒 第四种方法 1 2 3 4 5 6 7 8 9 #include &lt;Windows.h&gt; LARGE_INTEGER t1,t2,tc; QueryPerformanceFrequency(&amp;tc); QueryPerformanceCounter(&amp;t1); ... QueryPerformanceCounter(&amp;t2); double time=(double)(t2.QuadPart-t1.QuadPart)/(double)tc.QuadPart; printf(&#34;total times:[%lf] ms\\n&#34;, time * 1000);//ms (double)tc.QuadPart: 10 000 000 mpich命令 1 2 3 4 5 #mpiexec -l -hosts cn0,cn1 -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ mpiexec -l -f ./machinefile -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore4/host_code/ ./vec_add_host 24 :\\ -wdir ./armcore8/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore12/host_code/ ./vec_add_host 1024 24 其中machinefile内容为：\n">
 <title>Linux 常用命令</title>
 
 <link rel='canonical' href='https://xenithya.github.io/p/linux-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/'>
 
 <link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Linux 常用命令">
-<meta property='og:description' content="Linux 常用命令 1、查看进程所在的核ID号 1 2 3 4 pidof a.out # 获取pid ps -o pid,psr,comm -p &lt;pid&gt; taskset -c -p &lt;pid&gt; top -p &lt;pid&gt; # 按f进入菜单，空格键选择P，ESC退出，在最后一栏显示cpuid 2、显示终端输入过的命令 1 2 history # 每个命令都有一个命令号id，输入：!id 即输入该id对应的命令 3、进程绑定cpu 1 2 3 numactl --hardware #查看cpu numactl --show numastat 4、shell获取当前目录 1 2 CURRENT_DIR=$(cd $(dirname $0);pwd) echo ${CURRENT_DIR} 5、获取程序运行时间 第一种方法 1 2 3 4 5 6 7 8 9 #include &lt;sys/time.h&gt; struct timeval startTime, endTime; float timeUsed; gettimeofday(&amp;startTime, NULL); ... gettimeofday(&amp;endTime, NULL); timeUsed = 1000000 * (endTime.tv_sec - startTime.tv_sec) + (endTime.tv_usec - startTime.tv_usec); timeUsed /= 1000000; printf(&#34;total times:[%f]s\\n&#34;, timeUsed); 第二种方法 1 2 3 4 5 #include &lt;time.h&gt; clock_t start = clock(); // the code need to measure time clock_t end = clock(); double timeSpend = (double)(end - start) / CLOCKS_PER_SEC; //得到的结果是秒，(end-start)得到的结果是毫秒，不适用于多线程场合 第三种方法 1 2 3 4 #include &lt;Windows.h&gt; DWORD start = GetTickCount(); DWORD end = GetTickCount(); DWORD timeSpend = end - start; //得到的结果是毫秒 第四种方法 1 2 3 4 5 6 7 8 9 #include &lt;Windows.h&gt; LARGE_INTEGER t1,t2,tc; QueryPerformanceFrequency(&amp;tc); QueryPerformanceCounter(&amp;t1); ... QueryPerformanceCounter(&amp;t2); double time=(double)(t2.QuadPart-t1.QuadPart)/(double)tc.QuadPart; printf(&#34;total times:[%lf] ms\\n&#34;, time * 1000);//ms (double)tc.QuadPart: 10 000 000 6、mpich命令 1 2 3 4 5 #mpiexec -l -hosts cn0,cn1 -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ mpiexec -l -f ./machinefile -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore4/host_code/ ./vec_add_host 24 :\\ -wdir ./armcore8/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore12/host_code/ ./vec_add_host 1024 24 其中machinefile内容为：\n">
+<meta property='og:description' content="Linux 常用命令 查看进程所在的核ID号 1 2 3 4 pidof a.out # 获取pid ps -o pid,psr,comm -p &lt;pid&gt; taskset -c -p &lt;pid&gt; top -p &lt;pid&gt; # 按f进入菜单，空格键选择P，ESC退出，在最后一栏显示cpuid 显示终端输入过的命令 1 2 history # 每个命令都有一个命令号id，输入：!id 即输入该id对应的命令 进程绑定cpu 1 2 3 numactl --hardware #查看cpu numactl --show numastat shell获取当前目录 1 2 CURRENT_DIR=$(cd $(dirname $0);pwd) echo ${CURRENT_DIR} 获取程序运行时间 第一种方法 1 2 3 4 5 6 7 8 9 #include &lt;sys/time.h&gt; struct timeval startTime, endTime; float timeUsed; gettimeofday(&amp;startTime, NULL); ... gettimeofday(&amp;endTime, NULL); timeUsed = 1000000 * (endTime.tv_sec - startTime.tv_sec) + (endTime.tv_usec - startTime.tv_usec); timeUsed /= 1000000; printf(&#34;total times:[%f]s\\n&#34;, timeUsed); 第二种方法 1 2 3 4 5 #include &lt;time.h&gt; clock_t start = clock(); // the code need to measure time clock_t end = clock(); double timeSpend = (double)(end - start) / CLOCKS_PER_SEC; //得到的结果是秒，(end-start)得到的结果是毫秒，不适用于多线程场合 第三种方法 1 2 3 4 #include &lt;Windows.h&gt; DWORD start = GetTickCount(); DWORD end = GetTickCount(); DWORD timeSpend = end - start; //得到的结果是毫秒 第四种方法 1 2 3 4 5 6 7 8 9 #include &lt;Windows.h&gt; LARGE_INTEGER t1,t2,tc; QueryPerformanceFrequency(&amp;tc); QueryPerformanceCounter(&amp;t1); ... QueryPerformanceCounter(&amp;t2); double time=(double)(t2.QuadPart-t1.QuadPart)/(double)tc.QuadPart; printf(&#34;total times:[%lf] ms\\n&#34;, time * 1000);//ms (double)tc.QuadPart: 10 000 000 mpich命令 1 2 3 4 5 #mpiexec -l -hosts cn0,cn1 -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ mpiexec -l -f ./machinefile -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore4/host_code/ ./vec_add_host 24 :\\ -wdir ./armcore8/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore12/host_code/ ./vec_add_host 1024 24 其中machinefile内容为：\n">
 <meta property='og:url' content='https://xenithya.github.io/p/linux-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/'>
 <meta property='og:site_name' content='Xenithya的博客'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-04-25T16:10:29&#43;08:00'/><meta property='article:modified_time' content='2025-04-25T16:10:29&#43;08:00'/>
 <meta name="twitter:title" content="Linux 常用命令">
-<meta name="twitter:description" content="Linux 常用命令 1、查看进程所在的核ID号 1 2 3 4 pidof a.out # 获取pid ps -o pid,psr,comm -p &lt;pid&gt; taskset -c -p &lt;pid&gt; top -p &lt;pid&gt; # 按f进入菜单，空格键选择P，ESC退出，在最后一栏显示cpuid 2、显示终端输入过的命令 1 2 history # 每个命令都有一个命令号id，输入：!id 即输入该id对应的命令 3、进程绑定cpu 1 2 3 numactl --hardware #查看cpu numactl --show numastat 4、shell获取当前目录 1 2 CURRENT_DIR=$(cd $(dirname $0);pwd) echo ${CURRENT_DIR} 5、获取程序运行时间 第一种方法 1 2 3 4 5 6 7 8 9 #include &lt;sys/time.h&gt; struct timeval startTime, endTime; float timeUsed; gettimeofday(&amp;startTime, NULL); ... gettimeofday(&amp;endTime, NULL); timeUsed = 1000000 * (endTime.tv_sec - startTime.tv_sec) + (endTime.tv_usec - startTime.tv_usec); timeUsed /= 1000000; printf(&#34;total times:[%f]s\\n&#34;, timeUsed); 第二种方法 1 2 3 4 5 #include &lt;time.h&gt; clock_t start = clock(); // the code need to measure time clock_t end = clock(); double timeSpend = (double)(end - start) / CLOCKS_PER_SEC; //得到的结果是秒，(end-start)得到的结果是毫秒，不适用于多线程场合 第三种方法 1 2 3 4 #include &lt;Windows.h&gt; DWORD start = GetTickCount(); DWORD end = GetTickCount(); DWORD timeSpend = end - start; //得到的结果是毫秒 第四种方法 1 2 3 4 5 6 7 8 9 #include &lt;Windows.h&gt; LARGE_INTEGER t1,t2,tc; QueryPerformanceFrequency(&amp;tc); QueryPerformanceCounter(&amp;t1); ... QueryPerformanceCounter(&amp;t2); double time=(double)(t2.QuadPart-t1.QuadPart)/(double)tc.QuadPart; printf(&#34;total times:[%lf] ms\\n&#34;, time * 1000);//ms (double)tc.QuadPart: 10 000 000 6、mpich命令 1 2 3 4 5 #mpiexec -l -hosts cn0,cn1 -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ mpiexec -l -f ./machinefile -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore4/host_code/ ./vec_add_host 24 :\\ -wdir ./armcore8/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore12/host_code/ ./vec_add_host 1024 24 其中machinefile内容为：\n">
+<meta name="twitter:description" content="Linux 常用命令 查看进程所在的核ID号 1 2 3 4 pidof a.out # 获取pid ps -o pid,psr,comm -p &lt;pid&gt; taskset -c -p &lt;pid&gt; top -p &lt;pid&gt; # 按f进入菜单，空格键选择P，ESC退出，在最后一栏显示cpuid 显示终端输入过的命令 1 2 history # 每个命令都有一个命令号id，输入：!id 即输入该id对应的命令 进程绑定cpu 1 2 3 numactl --hardware #查看cpu numactl --show numastat shell获取当前目录 1 2 CURRENT_DIR=$(cd $(dirname $0);pwd) echo ${CURRENT_DIR} 获取程序运行时间 第一种方法 1 2 3 4 5 6 7 8 9 #include &lt;sys/time.h&gt; struct timeval startTime, endTime; float timeUsed; gettimeofday(&amp;startTime, NULL); ... gettimeofday(&amp;endTime, NULL); timeUsed = 1000000 * (endTime.tv_sec - startTime.tv_sec) + (endTime.tv_usec - startTime.tv_usec); timeUsed /= 1000000; printf(&#34;total times:[%f]s\\n&#34;, timeUsed); 第二种方法 1 2 3 4 5 #include &lt;time.h&gt; clock_t start = clock(); // the code need to measure time clock_t end = clock(); double timeSpend = (double)(end - start) / CLOCKS_PER_SEC; //得到的结果是秒，(end-start)得到的结果是毫秒，不适用于多线程场合 第三种方法 1 2 3 4 #include &lt;Windows.h&gt; DWORD start = GetTickCount(); DWORD end = GetTickCount(); DWORD timeSpend = end - start; //得到的结果是毫秒 第四种方法 1 2 3 4 5 6 7 8 9 #include &lt;Windows.h&gt; LARGE_INTEGER t1,t2,tc; QueryPerformanceFrequency(&amp;tc); QueryPerformanceCounter(&amp;t1); ... QueryPerformanceCounter(&amp;t2); double time=(double)(t2.QuadPart-t1.QuadPart)/(double)tc.QuadPart; printf(&#34;total times:[%lf] ms\\n&#34;, time * 1000);//ms (double)tc.QuadPart: 10 000 000 mpich命令 1 2 3 4 5 #mpiexec -l -hosts cn0,cn1 -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ mpiexec -l -f ./machinefile -wdir ./armcore0/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore4/host_code/ ./vec_add_host 24 :\\ -wdir ./armcore8/host_code/ ./vec_add_host 1024 24 :\\ -wdir ./armcore12/host_code/ ./vec_add_host 1024 24 其中machinefile内容为：\n">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -267,48 +267,44 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#linux-常用命令">Linux 常用命令</a>
-      <ol>
-        <li><a href="#1查看进程所在的核id号">1、查看进程所在的核ID号</a></li>
-        <li><a href="#2显示终端输入过的命令">2、显示终端输入过的命令</a></li>
-        <li><a href="#3进程绑定cpu">3、进程绑定cpu</a></li>
-        <li><a href="#4shell获取当前目录">4、shell获取当前目录</a></li>
-        <li><a href="#5获取程序运行时间">5、获取程序运行时间</a></li>
-        <li><a href="#6mpich命令">6、mpich命令</a></li>
-        <li><a href="#7免密登录">7、免密登录</a></li>
-        <li><a href="#8创建新用户及用户权限">8、创建新用户及用户权限</a></li>
-        <li><a href="#9vim删除多行">9、vim删除多行</a></li>
-        <li><a href="#10linux新建用户组权限">10、linux新建用户组权限</a></li>
-        <li><a href="#11编译内核">11、编译内核</a></li>
-        <li><a href="#12按时间列举目录下文件">12、按时间列举目录下文件</a></li>
-        <li><a href="#13dd复制硬盘">13、DD复制硬盘</a></li>
-        <li><a href="#14shell脚本获取当前路径">14、shell脚本获取当前路径</a></li>
-        <li><a href="#15查看文件夹大小">15、查看文件夹大小</a></li>
-        <li><a href="#16查看文件夹下有多少个文件">16、查看文件夹下有多少个文件</a></li>
-        <li><a href="#17环境变量">17、环境变量</a></li>
-        <li><a href="#18网络bind-error">18、网络bind error</a></li>
-        <li><a href="#19查看内核版本">19、查看内核版本</a></li>
-        <li><a href="#20查看cpu个数及核心数">20、查看cpu个数及核心数</a></li>
-        <li><a href="#21设置堆栈大小">21、设置堆栈大小</a></li>
-        <li><a href="#22mkstemp">22、mkstemp</a></li>
-        <li><a href="#23查看内核版本号">23、查看内核版本号</a></li>
-        <li><a href="#24lspci--k">24、lspci -k</a></li>
-        <li><a href="#25系统时间设置">25、系统时间设置</a></li>
-        <li><a href="#26查找指定字符串">26、查找指定字符串</a></li>
-        <li><a href="#27开机自动加载模块">27、开机自动加载模块</a></li>
-        <li><a href="#28编译成模块">28、编译成模块</a></li>
-        <li><a href="#29卸载pci设备">29、卸载PCI设备</a></li>
-        <li><a href="#30vscode添加头部注释">30、vscode添加头部注释</a></li>
-        <li><a href="#31linux-c内存泄漏检查">31、Linux C内存泄漏检查</a></li>
-        <li><a href="#32linux程序前台后台切换">32、Linux程序前台后台切换</a></li>
-        <li><a href="#33任意类型循环左右移位n位">33、任意类型循环左右移位n位</a></li>
-        <li><a href="#34lspci--vv">34、lspci -vv</a></li>
-        <li><a href="#35__builtin_popcount">35、__builtin_popcount</a></li>
-        <li><a href="#36绑定cpu的c代码实现">36、绑定CPU的C代码实现</a></li>
-        <li><a href="#37cgroup执行命令">37、cgroup执行命令</a></li>
-        <li><a href="#38binbash有字符r无法解析">38、/bin/bash有字符&rsquo;\r&rsquo;无法解析</a></li>
-      </ol>
-    </li>
+    <li><a href="#查看进程所在的核id号">查看进程所在的核ID号</a></li>
+    <li><a href="#显示终端输入过的命令">显示终端输入过的命令</a></li>
+    <li><a href="#进程绑定cpu">进程绑定cpu</a></li>
+    <li><a href="#shell获取当前目录">shell获取当前目录</a></li>
+    <li><a href="#获取程序运行时间">获取程序运行时间</a></li>
+    <li><a href="#mpich命令">mpich命令</a></li>
+    <li><a href="#免密登录">免密登录</a></li>
+    <li><a href="#创建新用户及用户权限">创建新用户及用户权限</a></li>
+    <li><a href="#vim删除多行">vim删除多行</a></li>
+    <li><a href="#linux新建用户组权限">linux新建用户组权限</a></li>
+    <li><a href="#编译内核">编译内核</a></li>
+    <li><a href="#按时间列举目录下文件">按时间列举目录下文件</a></li>
+    <li><a href="#dd复制硬盘">DD复制硬盘</a></li>
+    <li><a href="#shell脚本获取当前路径">shell脚本获取当前路径</a></li>
+    <li><a href="#查看文件夹大小">查看文件夹大小</a></li>
+    <li><a href="#查看文件夹下有多少个文件">查看文件夹下有多少个文件</a></li>
+    <li><a href="#环境变量">环境变量</a></li>
+    <li><a href="#网络bind-error">网络bind error</a></li>
+    <li><a href="#查看内核版本">查看内核版本</a></li>
+    <li><a href="#查看cpu个数及核心数">查看cpu个数及核心数</a></li>
+    <li><a href="#设置堆栈大小">设置堆栈大小</a></li>
+    <li><a href="#mkstemp">mkstemp</a></li>
+    <li><a href="#查看内核版本号">查看内核版本号</a></li>
+    <li><a href="#lspci--k">lspci -k</a></li>
+    <li><a href="#系统时间设置">系统时间设置</a></li>
+    <li><a href="#查找指定字符串">查找指定字符串</a></li>
+    <li><a href="#开机自动加载模块">开机自动加载模块</a></li>
+    <li><a href="#编译成模块">编译成模块</a></li>
+    <li><a href="#卸载pci设备">卸载PCI设备</a></li>
+    <li><a href="#vscode添加头部注释">vscode添加头部注释</a></li>
+    <li><a href="#linux-c内存泄漏检查">Linux C内存泄漏检查</a></li>
+    <li><a href="#linux程序前台后台切换">Linux程序前台后台切换</a></li>
+    <li><a href="#任意类型循环左右移位n位">任意类型循环左右移位n位</a></li>
+    <li><a href="#lspci--vv">lspci -vv</a></li>
+    <li><a href="#__builtin_popcount">__builtin_popcount</a></li>
+    <li><a href="#绑定cpu的c代码实现">绑定CPU的C代码实现</a></li>
+    <li><a href="#cgroup执行命令">cgroup执行命令</a></li>
+    <li><a href="#binbash有字符r无法解析">/bin/bash有字符&rsquo;\r&rsquo;无法解析</a></li>
   </ol>
 </nav>
         </div>
@@ -366,9 +362,9 @@
     <section class="article-content">
     
     
-    <h2 id="linux-常用命令">Linux 常用命令
-</h2><h3 id="1查看进程所在的核id号">1、查看进程所在的核ID号
-</h3><div class="highlight"><div class="chroma">
+    <h1 id="linux-常用命令">Linux 常用命令
+</h1><h2 id="查看进程所在的核id号">查看进程所在的核ID号
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -382,8 +378,8 @@
 </span></span><span class="line"><span class="cl"> top -p &lt;pid&gt;  <span class="c1"># 按f进入菜单，空格键选择P，ESC退出，在最后一栏显示cpuid</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="2显示终端输入过的命令">2、显示终端输入过的命令
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="显示终端输入过的命令">显示终端输入过的命令
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -393,8 +389,8 @@
 </span></span><span class="line"><span class="cl"> <span class="c1"># 每个命令都有一个命令号id，输入：!id 即输入该id对应的命令</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="3进程绑定cpu">3、进程绑定cpu
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="进程绑定cpu">进程绑定cpu
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -406,8 +402,8 @@
 </span></span><span class="line"><span class="cl"> numastat
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="4shell获取当前目录">4、shell获取当前目录
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="shell获取当前目录">shell获取当前目录
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -417,8 +413,8 @@
 </span></span><span class="line"><span class="cl"> <span class="nb">echo</span> <span class="si">${</span><span class="nv">CURRENT_DIR</span><span class="si">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="5获取程序运行时间">5、获取程序运行时间
-</h3><ul>
+</div><h2 id="获取程序运行时间">获取程序运行时间
+</h2><ul>
 <li>第一种方法</li>
 </ul>
 <div class="highlight"><div class="chroma">
@@ -508,8 +504,8 @@
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">tc</span><span class="p">.</span><span class="nl">QuadPart</span><span class="p">:</span> <span class="mi">10</span> <span class="mo">000</span> <span class="mo">000</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="6mpich命令">6、mpich命令
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="mpich命令">mpich命令
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -547,8 +543,8 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>代替。</p>
-<h3 id="7免密登录">7、免密登录
-</h3><p>免密登录本地：</p>
+<h2 id="免密登录">免密登录
+</h2><p>免密登录本地：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -599,8 +595,8 @@
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ssh root@172.168.0.11
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="8创建新用户及用户权限">8、创建新用户及用户权限
-</h3><ul>
+</div><h2 id="创建新用户及用户权限">创建新用户及用户权限
+</h2><ul>
 <li>增加用户：</li>
 </ul>
 <p>(1)在root权限下</p>
@@ -715,8 +711,8 @@
 </span></span><span class="line"><span class="cl"> vim /etc/passwd  <span class="c1"># 将其修改为/bin/bash 后即可</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="9vim删除多行">9、vim删除多行
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="vim删除多行">vim删除多行
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -724,11 +720,11 @@
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> 9,12d
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="10linux新建用户组权限">10、linux新建用户组权限
-</h3><p>比如找不到root下安装好的mpi</p>
+</div><h2 id="linux新建用户组权限">linux新建用户组权限
+</h2><p>比如找不到root下安装好的mpi</p>
 <p>方法：修改在xyy用户下的.bashrc文件，将路径添加到末尾，再source .bashrc即可。</p>
-<h3 id="11编译内核">11、编译内核
-</h3><div class="highlight"><div class="chroma">
+<h2 id="编译内核">编译内核
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -888,8 +884,8 @@
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo update-grub
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="12按时间列举目录下文件">12、按时间列举目录下文件
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="按时间列举目录下文件">按时间列举目录下文件
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -897,8 +893,8 @@
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> ll -rt
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="13dd复制硬盘">13、DD复制硬盘
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="dd复制硬盘">DD复制硬盘
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -920,8 +916,8 @@
 </span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/dev/sdj <span class="nv">of</span><span class="o">=</span>/dev/sdk <span class="nv">bs</span><span class="o">=</span>64M
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="14shell脚本获取当前路径">14、shell脚本获取当前路径
-</h3><ul>
+</div><h2 id="shell脚本获取当前路径">shell脚本获取当前路径
+</h2><ul>
 <li>方法一</li>
 </ul>
 <div class="highlight"><div class="chroma">
@@ -957,8 +953,8 @@
 </span></span><span class="line"><span class="cl"> <span class="c1"># pwd，显示当前工作目录(cd执行后的)</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="15查看文件夹大小">15、查看文件夹大小
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="查看文件夹大小">查看文件夹大小
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -968,8 +964,8 @@
 </span></span><span class="line"><span class="cl">du -sh /*
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="16查看文件夹下有多少个文件">16、查看文件夹下有多少个文件
-</h3><ul>
+</div><h2 id="查看文件夹下有多少个文件">查看文件夹下有多少个文件
+</h2><ul>
 <li>查看目录下有多少个文件及文件夹需在终端输入</li>
 </ul>
 <div class="highlight"><div class="chroma">
@@ -1013,8 +1009,8 @@
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">/bin/ls -l <span class="p">|</span>grep ^-<span class="p">|</span>wc -l
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="17环境变量">17、环境变量
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="环境变量">环境变量
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1024,8 +1020,8 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># 用户每次登录，会执行该文件夹下的所有.sh文件</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="18网络bind-error">18、网络bind error
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="网络bind-error">网络bind error
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1035,8 +1031,8 @@
 </span></span><span class="line"><span class="cl">netstat -tanlp
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="19查看内核版本">19、查看内核版本
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="查看内核版本">查看内核版本
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1046,8 +1042,8 @@
 </span></span><span class="line"><span class="cl">cat /proc/version
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="20查看cpu个数及核心数">20、查看cpu个数及核心数
-</h3><p>总核数 = 物理CPU个数 X 每颗物理CPU的核数
+</div><h2 id="查看cpu个数及核心数">查看cpu个数及核心数
+</h2><p>总核数 = 物理CPU个数 X 每颗物理CPU的核数
 总逻辑CPU数 = 物理CPU个数 X 每颗物理CPU的核数 X 超线程数</p>
 <ul>
 <li>查看物理CPU个数</li>
@@ -1094,8 +1090,8 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>注意，此处查看的线程数是总的线程数，可以理解为逻辑cpu的数量</p>
-<h3 id="21设置堆栈大小">21、设置堆栈大小
-</h3><div class="highlight"><div class="chroma">
+<h2 id="设置堆栈大小">设置堆栈大小
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1127,8 +1123,8 @@
 </span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;****** [%d]: %ld %ld ******</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">__LINE__</span><span class="p">,</span> <span class="n">rlim</span><span class="p">.</span><span class="n">rlim_cur</span><span class="p">,</span> <span class="n">rlim</span><span class="p">.</span><span class="n">rlim_max</span><span class="p">);</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="22mkstemp">22、mkstemp
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="mkstemp">mkstemp
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1143,8 +1139,8 @@
 <p>mkstemp()会以可读写模式和0600 权限来打开该文件, 如果该文件不存在则会建立该文件. 打开该文件后其文件描述词会返回.</p>
 <p>文件顺利打开后返回可读写的文件描述词. 若果文件打开失败则返回NULL, 并把错误代码存在errno 中.</p>
 <p>错误代码：EINVAL 参数template 字符串最后六个字符非XXXXXX. EEXIST 无法建立临时文件.</p>
-<h3 id="23查看内核版本号">23、查看内核版本号
-</h3><div class="highlight"><div class="chroma">
+<h2 id="查看内核版本号">查看内核版本号
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -1152,8 +1148,8 @@
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">uname -r
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="24lspci--k">24、lspci -k
-</h3><p>选项表示输出信息中显示正在使用的驱动和内核中可以支持该设备的模块。</p>
+</div><h2 id="lspci--k">lspci -k
+</h2><p>选项表示输出信息中显示正在使用的驱动和内核中可以支持该设备的模块。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -1162,8 +1158,8 @@
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">lspci -k -s 08:00.0
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="25系统时间设置">25、系统时间设置
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="系统时间设置">系统时间设置
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1175,8 +1171,8 @@
 </span></span><span class="line"><span class="cl"> <span class="c1">#  月 日 时 分 年</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="26查找指定字符串">26、查找指定字符串
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="查找指定字符串">查找指定字符串
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -1184,8 +1180,8 @@
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">grep -rn reserve_all_mem_mt_safe
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="27开机自动加载模块">27、开机自动加载模块
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="开机自动加载模块">开机自动加载模块
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -1223,8 +1219,8 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>文件中添加</p>
-<h3 id="28编译成模块">28、编译成模块
-</h3><div class="highlight"><div class="chroma">
+<h2 id="编译成模块">编译成模块
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -1232,8 +1228,8 @@
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">make -C /home/sys/linux-4.19.46-mt/ <span class="nv">M</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span> modules
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="29卸载pci设备">29、卸载PCI设备
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="卸载pci设备">卸载PCI设备
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -1258,8 +1254,8 @@
 </span></span><span class="line"><span class="cl">update-initramfs: Generating /boot/initrd.img-4.19.46-vfio-1119+
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="30vscode添加头部注释">30、vscode添加头部注释
-</h3><ul>
+</div><h2 id="vscode添加头部注释">vscode添加头部注释
+</h2><ul>
 <li>
 <p>搜索 fileheader</p>
 </li>
@@ -1280,8 +1276,8 @@
 </span></span><span class="line"><span class="cl">ctrl + alt + t  <span class="c1"># 生成函数注释</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="31linux-c内存泄漏检查">31、Linux C内存泄漏检查
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="linux-c内存泄漏检查">Linux C内存泄漏检查
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -1289,8 +1285,8 @@
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">valgrind --tool<span class="o">=</span>memcheck --leak-check<span class="o">=</span>full ./test
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="32linux程序前台后台切换">32、Linux程序前台后台切换
-</h3><ul>
+</div><h2 id="linux程序前台后台切换">Linux程序前台后台切换
+</h2><ul>
 <li>在Linux终端运行命令的时候，在命令末尾加上 &amp; 符号，就可以让程序在后台运行</li>
 </ul>
 <div class="highlight"><div class="chroma">
@@ -1347,8 +1343,8 @@
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat@Ubuntu:~/unp/unpv13e/tcpcliserv$ <span class="nb">kill</span> %1
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="33任意类型循环左右移位n位">33、任意类型循环左右移位n位
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="任意类型循环左右移位n位">任意类型循环左右移位n位
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1360,12 +1356,12 @@
 </span></span></span><span class="line"><span class="cl"><span class="cp">#define LOGIC_RSHIFT_NVLAN(data, nbit) ((data | (1 &lt;&lt; (nbit))) | 0xFFFFFFF)
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="34lspci--vv">34、lspci -vv
-</h3><p>Linux 中用于显示 PCI/PCIe 设备超详细硬件信息的命令</p>
-<h3 id="35__builtin_popcount">35、__builtin_popcount
-</h3><p>GCC 编译器中四个重要的内置函数之一。__builtin_popcount(x)：该函数用于计算一个整数的个数(设置位)。</p>
-<h3 id="36绑定cpu的c代码实现">36、绑定CPU的C代码实现
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="lspci--vv">lspci -vv
+</h2><p>Linux 中用于显示 PCI/PCIe 设备超详细硬件信息的命令</p>
+<h2 id="__builtin_popcount">__builtin_popcount
+</h2><p>GCC 编译器中四个重要的内置函数之一。__builtin_popcount(x)：该函数用于计算一个整数的个数(设置位)。</p>
+<h2 id="绑定cpu的c代码实现">绑定CPU的C代码实现
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1427,8 +1423,8 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="37cgroup执行命令">37、cgroup执行命令
-</h3><p>使用 Linux ​cgroups（控制组）​来限制进程 CPU 资源</p>
+</div><h2 id="cgroup执行命令">cgroup执行命令
+</h2><p>使用 Linux ​cgroups（控制组）​来限制进程 CPU 资源</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -1437,8 +1433,8 @@
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cgexec -g cpu:test_cpu ./a.out
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="38binbash有字符r无法解析">38、/bin/bash有字符&rsquo;\r&rsquo;无法解析
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="binbash有字符r无法解析">/bin/bash有字符&rsquo;\r&rsquo;无法解析
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1450,7 +1446,8 @@
 </span></span><span class="line"><span class="cl"><span class="c1">### : set ff=unix</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div>
+</div><hr>
+
 </section>
 
 
