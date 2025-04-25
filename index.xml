@@ -7,7 +7,28 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Xun Yingya</copyright>
-        <lastBuildDate>Fri, 25 Apr 2025 16:10:47 +0800</lastBuildDate><atom:link href="https://xenithya.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 25 Apr 2025 16:26:50 +0800</lastBuildDate><atom:link href="https://xenithya.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Git常用命令</title>
+        <link>https://xenithya.github.io/p/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</link>
+        <pubDate>Fri, 25 Apr 2025 16:26:50 +0800</pubDate>
+        
+        <guid>https://xenithya.github.io/p/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</guid>
+        <description>&lt;p&gt;git submodule add &lt;a class=&#34;link&#34; href=&#34;https://github.com/user/lib-example.git&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/user/lib-example.git&lt;/a&gt; libs/external&lt;/p&gt;
+&lt;p&gt;git add .gitmodules libs/external  # 添加子模块元数据及目录
+git commit -m &amp;ldquo;feat: 添加子模块 lib-example&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;git clone &amp;ndash;recursive &amp;lt;主仓库地址&amp;gt;&lt;/p&gt;
+&lt;p&gt;彻底从 Git 仓库中移除一个子模块（submodule）
+git submodule deinit -f 子模块路径  # 示例：git submodule deinit -f libs/logger
+git rm &amp;ndash;cached 子模块路径  # 示例：git rm &amp;ndash;cached libs/logger
+rm -rf 子模块路径  # 示例：rm -rf libs/logger
+rm -rf .git/modules/子模块路径  # 示例：rm -rf .git/modules/libs/logger
+git add .gitmodules  # 提交配置变更
+git commit -m &amp;ldquo;移除子模块：子模块路径&amp;rdquo;  # 示例：git commit -m &amp;ldquo;移除子模块：libs/logger&amp;rdquo;
+git push origin 主分支名  # 示例：git push origin main&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>远程桌面设置</title>
         <link>https://xenithya.github.io/p/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%AE%BE%E7%BD%AE/</link>
         <pubDate>Fri, 25 Apr 2025 16:10:47 +0800</pubDate>
@@ -30,28 +51,36 @@
 &lt;/div&gt;&lt;p&gt;找到:&lt;/p&gt;
 &lt;p&gt;计算机配置-&amp;gt;管理模板-&amp;gt;Windows组件-&amp;gt;远程桌面服务-&amp;gt;远程桌面会话主机-&amp;gt;远程会话环境。&lt;/p&gt;
 &lt;p&gt;下面这几个打开，有效提高rdp性能。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://xenithya.github.io/.%5cpic%5c%e8%bf%9c%e7%a8%8b%e4%bc%9a%e8%af%9d%e7%8e%af%e5%a2%83.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://xenithya.github.io/p/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%AE%BE%E7%BD%AE/%E8%BF%9C%E7%A8%8B%E4%BC%9A%E8%AF%9D%E7%8E%AF%E5%A2%83.png&#34;
+	width=&#34;1286&#34;
+	height=&#34;911&#34;
+	srcset=&#34;https://xenithya.github.io/p/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%AE%BE%E7%BD%AE/%E8%BF%9C%E7%A8%8B%E4%BC%9A%E8%AF%9D%E7%8E%AF%E5%A2%83_hu_ddb447f522ffe3f8.png 480w, https://xenithya.github.io/p/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%AE%BE%E7%BD%AE/%E8%BF%9C%E7%A8%8B%E4%BC%9A%E8%AF%9D%E7%8E%AF%E5%A2%83_hu_974b29c85cb0673.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;远程会话环境设置&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;141&#34;
+		data-flex-basis=&#34;338px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;二连接设置&#34;&gt;二、连接设置
 &lt;/h2&gt;&lt;p&gt;找到:&lt;/p&gt;
 &lt;p&gt;计算机配置-&amp;gt;管理模板-&amp;gt;Windows组件-&amp;gt;远程桌面服务-&amp;gt;远程桌面会话主机-&amp;gt;连接。&lt;/p&gt;
 &lt;p&gt;rdp协议同时使用udp和tcp。有效增加网络稳定性和传输速率。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://xenithya.github.io/.%5cpic%5c%e8%bf%9e%e6%8e%a5%e8%ae%be%e7%bd%ae.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://xenithya.github.io/p/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%AE%BE%E7%BD%AE/%E8%BF%9E%E6%8E%A5%E8%AE%BE%E7%BD%AE.png&#34;
+	width=&#34;845&#34;
+	height=&#34;328&#34;
+	srcset=&#34;https://xenithya.github.io/p/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%AE%BE%E7%BD%AE/%E8%BF%9E%E6%8E%A5%E8%AE%BE%E7%BD%AE_hu_524f12d6c9352aa2.png 480w, https://xenithya.github.io/p/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%AE%BE%E7%BD%AE/%E8%BF%9E%E6%8E%A5%E8%AE%BE%E7%BD%AE_hu_7e4a99352b1e157a.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;连接设置&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;257&#34;
+		data-flex-basis=&#34;618px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;三、注册表设置&lt;/p&gt;
@@ -66,14 +95,18 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;敲回车&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://xenithya.github.io/.%5cpic%5c%e6%b3%a8%e5%86%8c%e8%a1%a8%e8%ae%be%e7%bd%ae.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://xenithya.github.io/p/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%AE%BE%E7%BD%AE/%E6%B3%A8%E5%86%8C%E8%A1%A8%E8%AE%BE%E7%BD%AE.png&#34;
+	width=&#34;807&#34;
+	height=&#34;267&#34;
+	srcset=&#34;https://xenithya.github.io/p/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%AE%BE%E7%BD%AE/%E6%B3%A8%E5%86%8C%E8%A1%A8%E8%AE%BE%E7%BD%AE_hu_e8c89a4bdfe718bc.png 480w, https://xenithya.github.io/p/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%AE%BE%E7%BD%AE/%E6%B3%A8%E5%86%8C%E8%A1%A8%E8%AE%BE%E7%BD%AE_hu_179e4852ee1164f7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;注册表设置&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;302&#34;
+		data-flex-basis=&#34;725px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;在空白处右键-&amp;gt;新建-&amp;gt;DWORD（32位）值，命名为&lt;/p&gt;
