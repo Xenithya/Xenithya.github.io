@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Sphinx + Doxygen生成html Doxygen 是一款开源的跨平台文档生成工具，主要用于从带有特定格式注释的源代码中提取信息，自动生成结构化文档。它支持多种编程语言（如 C、C++、Java、Python 等），并能生成 HTML、PDF、LaTeX、RTF 等多种格式的文档。一般建议让 Doxygen 只看头文件，避免扫描 .c/.cpp 文件中重复定义。\n">
+<title>Sphinx &#43; Doxygen生成html</title>
+
+<link rel='canonical' href='https://xenithya.github.io/p/sphinx--doxygen%E7%94%9F%E6%88%90html/'>
+
+<link rel="stylesheet" href="/scss/style.min.946cca6c6259ef94ac55abfae7c7bf3291ea3ed5eea17ef77500b257217c6710.css"><meta property='og:title' content="Sphinx + Doxygen生成html">
+<meta property='og:description' content="Sphinx + Doxygen生成html Doxygen 是一款开源的跨平台文档生成工具，主要用于从带有特定格式注释的源代码中提取信息，自动生成结构化文档。它支持多种编程语言（如 C、C++、Java、Python 等），并能生成 HTML、PDF、LaTeX、RTF 等多种格式的文档。一般建议让 Doxygen 只看头文件，避免扫描 .c/.cpp 文件中重复定义。\n">
+<meta property='og:url' content='https://xenithya.github.io/p/sphinx--doxygen%E7%94%9F%E6%88%90html/'>
+<meta property='og:site_name' content='Xenithya的博客'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-04-25T16:10:29&#43;08:00'/><meta property='article:modified_time' content='2025-05-28T09:24:34&#43;00:00'/>
+<meta name="twitter:title" content="Sphinx + Doxygen生成html">
+<meta name="twitter:description" content="Sphinx + Doxygen生成html Doxygen 是一款开源的跨平台文档生成工具，主要用于从带有特定格式注释的源代码中提取信息，自动生成结构化文档。它支持多种编程语言（如 C、C++、Java、Python 等），并能生成 HTML、PDF、LaTeX、RTF 等多种格式的文档。一般建议让 Doxygen 只看头文件，避免扫描 .c/.cpp 文件中重复定义。\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_612b06fbf331ef43.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Xenithya的博客</a></h1>
+            <h2 class="site-description">欢迎来到我的博客网站</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>档案</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#基础工具安装">基础工具安装</a>
+      <ol>
+        <li><a href="#doxygen-核心工具">Doxygen 核心工具</a></li>
+        <li><a href="#辅助工具可选但推荐">​​辅助工具（可选但推荐）</a></li>
+      </ol>
+    </li>
+    <li><a href="#配置文件生成">配置文件生成</a></li>
+    <li><a href="#核心配置">核心配置</a>
+      <ol>
+        <li><a href="#项目信息">​项目信息</a></li>
+        <li><a href="#输入与输出路径">输入与输出路径</a></li>
+        <li><a href="#输出格式">输出格式</a></li>
+        <li><a href="#注释提取规则">注释提取规则</a></li>
+        <li><a href="#启用-xml-生成功能">启用 XML 生成功能</a></li>
+        <li><a href="#确保代码提取完整性">确保代码提取完整性</a></li>
+        <li><a href="#生成图表或交叉引用">生成图表或交叉引用</a></li>
+        <li><a href="#通过别名注册自定义指令">通过别名注册自定义指令</a></li>
+        <li><a href="#宏是否被提取">宏是否被提取</a></li>
+      </ol>
+    </li>
+    <li><a href="#验证与使用">验证与使用</a></li>
+    <li><a href="#常见问题与解决办法">常见问题与解决办法</a>
+      <ol>
+        <li><a href="#函数指针或数组参数被错误解析为基础类型">函数指针或数组参数被错误解析为基础类型</a>
+          <ol>
+            <li><a href="#-问题描述">❓ 问题描述</a></li>
+            <li><a href="#-解决办法">✅ 解决办法</a></li>
+          </ol>
+        </li>
+        <li><a href="#2-函数使用-__attribute__-报错">2. 函数使用 <code>__attribute__</code> 报错</a>
+          <ol>
+            <li><a href="#-问题描述-1">❓ 问题描述</a></li>
+            <li><a href="#-解决办法-1">✅ 解决办法</a></li>
+          </ol>
+        </li>
+        <li><a href="#3-duplicate-c-declaration-警告结构体重复声明">3. <code>Duplicate C++ declaration</code> 警告：结构体重复声明</a>
+          <ol>
+            <li><a href="#-问题描述-2">❓ 问题描述</a></li>
+            <li><a href="#-解决办法-2">✅ 解决办法</a></li>
+          </ol>
+        </li>
+        <li><a href="#4-清理缓存以解决重复定义或无效变更">4. 清理缓存以解决重复定义或无效变更</a>
+          <ol>
+            <li><a href="#-问题描述-3">❓ 问题描述</a></li>
+            <li><a href="#-解决办法-3">✅ 解决办法</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/sphinx--doxygen%E7%94%9F%E6%88%90html/">Sphinx &#43; Doxygen生成html</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Apr 25, 2025</time>
+            </div>
+        
+
+        <div class="article-time-lastmod">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time>
+                    May 28, 2025 09:24 UTC
+                </time>
+            </div>
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="sphinx--doxygen生成html">Sphinx + Doxygen生成html
+</h1><p>Doxygen 是一款开源的跨平台文档生成工具，主要用于从带有特定格式注释的源代码中提取信息，自动生成结构化文档。它支持多种编程语言（如 C、C++、Java、Python 等），并能生成 HTML、PDF、LaTeX、RTF 等多种格式的文档。一般建议让 Doxygen 只看头文件，避免扫描 .c/.cpp 文件中重复定义。</p>
+<h2 id="基础工具安装">基础工具安装
+</h2><h3 id="doxygen-核心工具">Doxygen 核心工具
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get install doxygen    <span class="c1"># Debian/Ubuntu</span>
+</span></span><span class="line"><span class="cl">sudo yum install doxygen        <span class="c1"># Fedora/CentOS</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="辅助工具可选但推荐">​​辅助工具（可选但推荐）
+</h3><ul>
+<li>Graphviz​​：用于生成类图、调用关系图等可视化内容：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Windows：勾选安装或单独下载</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Linux/macOS：</span>
+</span></span><span class="line"><span class="cl">sudo apt-get install graphviz    <span class="c1"># Linux</span>
+</span></span><span class="line"><span class="cl">brew install graphviz            <span class="c1"># macOS</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>LaTeX​​（生成 PDF 文档）：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Windows：安装 MiKTeX（官网下载）</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Linux：</span>
+</span></span><span class="line"><span class="cl">sudo apt-get install texlive-full
+</span></span><span class="line"><span class="cl"><span class="c1"># macOS：</span>
+</span></span><span class="line"><span class="cl">brew install --cask mactex
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="配置文件生成">配置文件生成
+</h2><p>在项目根目录运行命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">doxygen -g  <span class="c1">#或者</span>
+</span></span><span class="line"><span class="cl">doxygen -s -g Doxyfile
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>生成默认 Doxyfile</p>
+<h2 id="核心配置">核心配置
+</h2><h3 id="项目信息">​项目信息
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">PROJECT_NAME</span>      <span class="o">=</span> <span class="s2">&#34;My Project&#34;</span>    <span class="c1"># 项目名称</span>
+</span></span><span class="line"><span class="cl"><span class="nv">PROJECT_NUMBER</span>    <span class="o">=</span> <span class="s2">&#34;1.0&#34;</span>           <span class="c1"># 版本号</span>
+</span></span><span class="line"><span class="cl"><span class="nv">OUTPUT_LANGUAGE</span>   <span class="o">=</span> Chinese         <span class="c1"># 输出语言（支持中文）</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="输入与输出路径">输入与输出路径
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">INPUT</span>             <span class="o">=</span> ./src           <span class="c1"># 源码路径</span>
+</span></span><span class="line"><span class="cl"><span class="nv">RECURSIVE</span>         <span class="o">=</span> YES             <span class="c1"># 递归搜索子目录</span>
+</span></span><span class="line"><span class="cl"><span class="nv">OUTPUT_DIRECTORY</span>  <span class="o">=</span> ./docs          <span class="c1"># 输出目录</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="输出格式">输出格式
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">GENERATE_HTML</span>     <span class="o">=</span> YES             <span class="c1"># 生成 HTML</span>
+</span></span><span class="line"><span class="cl"><span class="nv">GENERATE_LATEX</span>    <span class="o">=</span> NO              <span class="c1"># 关闭 LaTeX（需 PDF 时设为 YES）</span>
+</span></span><span class="line"><span class="cl"><span class="nv">HAVE_DOT</span>          <span class="o">=</span> YES             <span class="c1"># 启用 Graphviz 图表</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="注释提取规则">注释提取规则
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">EXTRACT_ALL</span>       <span class="o">=</span> YES             <span class="c1"># 提取所有代码元素（即使无注释）</span>
+</span></span><span class="line"><span class="cl"><span class="nv">FILE_PATTERNS</span>     <span class="o">=</span> *.c *.h *.cpp   <span class="c1"># 处理指定扩展名的文件</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="启用-xml-生成功能">启用 XML 生成功能
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">GENERATE_XML</span> <span class="o">=</span> YES     <span class="c1"># 启用XML输出（默认NO，必须显式设为YES）</span>
+</span></span><span class="line"><span class="cl"><span class="nv">XML_OUTPUT</span> <span class="o">=</span> xml       <span class="c1"># 指定XML文件输出目录（默认在OUTPUT_DIRECTORY下生成xml文件夹）</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="确保代码提取完整性">确保代码提取完整性
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">EXTRACT_ALL</span> <span class="o">=</span> YES      <span class="c1"># 提取所有类/函数，即使无注释</span>
+</span></span><span class="line"><span class="cl"><span class="nv">EXTRACT_PRIVATE</span> <span class="o">=</span> YES  <span class="c1"># 提取私有成员</span>
+</span></span><span class="line"><span class="cl"><span class="nv">EXTRACT_STATIC</span> <span class="o">=</span> YES   <span class="c1"># 提取静态成员</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="生成图表或交叉引用">生成图表或交叉引用
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">HAVE_DOT</span> <span class="o">=</span> YES         <span class="c1"># 依赖Graphviz生成关系图</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="通过别名注册自定义指令">通过别名注册自定义指令
+</h3><ul>
+<li>定义 ALIASES，将 @xun 映射为合法指令：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">ALIASES</span> <span class="o">+=</span> <span class="s2">&#34;xun=@note 开发者：\n&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="宏是否被提取">宏是否被提取
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">MACRO_EXPANSION</span> <span class="o">=</span> YES
+</span></span><span class="line"><span class="cl"><span class="nv">EXPAND_ONLY_PREDEF</span> <span class="o">=</span> NO
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 是否启用了对 #define 的提取</span>
+</span></span><span class="line"><span class="cl"><span class="nv">ENABLE_PREPROCESSING</span> <span class="o">=</span> YES
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="验证与使用">验证与使用
+</h2><p>生成文档:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">doxygen Doxyfile
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="常见问题与解决办法">常见问题与解决办法
+</h2><h3 id="函数指针或数组参数被错误解析为基础类型">函数指针或数组参数被错误解析为基础类型
+</h3><h4 id="-问题描述">❓ 问题描述
+</h4><p>函数声明如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">nn_infer_only</span><span class="p">(</span><span class="n">nn_context</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="n">nn_tensor</span> <span class="n">input_buffer</span><span class="p">[]);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>通过 Sphinx + Breathe 渲染后，<code>.rst</code> 中变成：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-rst" data-lang="rst"><span class="line"><span class="cl"><span class="p">..</span> <span class="ow">doxygenfunction</span><span class="p">::</span> nn_infer_only(nn_context *, nn_tensor)<span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>input_buffer[]</code> 被错误解析为 <code>nn_tensor</code>，造成文档描述不准确。</p>
+<h4 id="-解决办法">✅ 解决办法
+</h4><p>确保 <code>Doxygen</code> 配置文件中启用以下选项：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="na">OPTIMIZE_OUTPUT_FOR_C</span> <span class="o">=</span> <span class="s">YES</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>该选项告诉 Doxygen 以 C 语言语法风格解析参数（特别是数组、指针和函数参数列表），避免将数组误解为单个类型。</p>
+<p>我的解决办法是通过将 <code>nn_tensor input_buffer[]</code> 改为 <code>nn_tensor *input_buffer</code></p>
+<hr>
+<h3 id="2-函数使用-__attribute__-报错">2. 函数使用 <code>__attribute__</code> 报错
+</h3><h4 id="-问题描述-1">❓ 问题描述
+</h4><p>定义如下函数：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">print_msg</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">format</span><span class="p">,</span> <span class="p">...)</span> <span class="nf">__attribute__</span><span class="p">((</span><span class="nf">format</span><span class="p">(</span><span class="n">printf</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)));</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>报错信息：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Unable to resolve <span class="k">function</span> <span class="s2">&#34;print_msg&#34;</span> with arguments <span class="s2">&#34;(const char*, ...)&#34;</span>
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">Error in declarator or parameters-and-qualifiers
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="-解决办法-1">✅ 解决办法
+</h4><p>在 <code>Doxygen</code> 配置文件 <code>Doxyfile</code> 中添加：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="na">PREDEFINED +</span><span class="o">=</span> <span class="s">__attribute__(x)=</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这样 Doxygen 在预处理阶段会忽略 GNU 扩展的 <code>__attribute__</code>，避免解析失败。</p>
+<hr>
+<h3 id="3-duplicate-c-declaration-警告结构体重复声明">3. <code>Duplicate C++ declaration</code> 警告：结构体重复声明
+</h3><h4 id="-问题描述-2">❓ 问题描述
+</h4><p>当存在以下代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">detection</span> <span class="n">detection</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">detection</span> <span class="p">{</span> <span class="p">...</span> <span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Doxygen 与 Breathe 会为 <code>struct detection</code> 和 <code>typedef detection</code> 各生成一份文档，导致警告：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">WARNING: Duplicate C++ declaration, also defined at ...
+</span></span><span class="line"><span class="cl">Declaration is <span class="s1">&#39;.. cpp:type:: struct detection detection&#39;</span>.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="-解决办法-2">✅ 解决办法
+</h4><p>在 <code>Doxyfile</code> 中添加：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="na">TYPEDEF_HIDES_STRUCT</span> <span class="o">=</span> <span class="s">YES</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>启用该选项后，Doxygen 在发现 typedef 与 struct 同名时只生成一份文档，避免重复。</p>
+<p>我的解决办法是将：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">box</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">box</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>改为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_box</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">box</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="4-清理缓存以解决重复定义或无效变更">4. 清理缓存以解决重复定义或无效变更
+</h3><h4 id="-问题描述-3">❓ 问题描述
+</h4><p>明明修改了 <code>.h</code> 文件或 <code>Doxyfile</code>，但生成文档仍然出现旧的内容或重复定义。</p>
+<h4 id="-解决办法-3">✅ 解决办法
+</h4><p>清理生成目录：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 示例：</span>
+</span></span><span class="line"><span class="cl">rm -rf build/xml  <span class="c1"># 清除 Doxygen XML 输出</span>
+</span></span><span class="line"><span class="cl">rm -rf source/pnna/pnna_api/*.rst  <span class="c1"># 清除旧的 .rst</span>
+</span></span><span class="line"><span class="cl">make clean html  <span class="c1"># 重新构建文档</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>确保 <code>.rst</code> 和 XML 数据都是最新的。</p>
+<hr>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 May 28, 2025 09:24 UTC
+        </span>
+    </section></footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2025 Xun Yingya
+    </section>
+    
+    <section class="powerby">
+        
+            Xenithya的个人博客 <br/>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+    .highlight {
+         
+        max-height: 400px;
+        overflow: hidden;
+    }
+
+    .code-show {
+        max-height: none !important;
+    }
+
+    .code-more-box {
+        width: 100%;
+        padding-top: 78px;
+        background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), to(#fff));
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+    }
+
+    .code-more-btn {
+        display: block;
+        margin: auto;
+        width: 44px;
+        height: 22px;
+        background: #f0f0f5;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        padding-top: 6px;
+        cursor: pointer;
+    }
+
+    .code-more-img {
+        cursor: pointer !important;
+        display: block;
+        margin: auto;
+        width: 22px;
+        height: 16px;
+    }
+</style>
+
+<script>
+  function initCodeMoreBox() {
+    let codeBlocks = document.querySelectorAll(".highlight");
+    if (!codeBlocks) {
+      return;
+    }
+    codeBlocks.forEach(codeBlock => {
+      
+      if (codeBlock.scrollHeight <= codeBlock.clientHeight) {
+        return;
+      }
+      
+      
+      let codeMoreBox = document.createElement('div');
+      codeMoreBox.classList.add('code-more-box');
+      
+      let codeMoreBtn = document.createElement('span');
+      codeMoreBtn.classList.add('code-more-btn');
+      codeMoreBtn.addEventListener('click', () => {
+        codeBlock.classList.add('code-show');
+        codeMoreBox.style.display = 'none';
+        
+        window.dispatchEvent(new Event('resize'))
+      })
+      
+      let img = document.createElement('img');
+      img.classList.add('code-more-img');
+      img.src = "https://xenithya.github.io/icons/codeMore.png"
+      
+      codeMoreBtn.appendChild(img);
+      codeMoreBox.appendChild(codeMoreBtn);
+      codeBlock.appendChild(codeMoreBox)
+    })
+  }
+  
+  initCodeMoreBox();
+</script>
+
+    </body>
+</html>
