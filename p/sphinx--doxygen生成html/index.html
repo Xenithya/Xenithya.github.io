@@ -10,7 +10,7 @@
 <meta property='og:description' content="Sphinx + Doxygen生成html Doxygen 是一款开源的跨平台文档生成工具，主要用于从带有特定格式注释的源代码中提取信息，自动生成结构化文档。它支持多种编程语言（如 C、C++、Java、Python 等），并能生成 HTML、PDF、LaTeX、RTF 等多种格式的文档。一般建议让 Doxygen 只看头文件，避免扫描 .c/.cpp 文件中重复定义。\n">
 <meta property='og:url' content='https://xenithya.github.io/p/sphinx--doxygen%E7%94%9F%E6%88%90html/'>
 <meta property='og:site_name' content='Xenithya的博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-04-25T16:10:29&#43;08:00'/><meta property='article:modified_time' content='2025-05-28T09:24:34&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-04-25T16:10:29&#43;08:00'/><meta property='article:modified_time' content='2025-05-28T09:50:27&#43;00:00'/>
 <meta name="twitter:title" content="Sphinx + Doxygen生成html">
 <meta name="twitter:description" content="Sphinx + Doxygen生成html Doxygen 是一款开源的跨平台文档生成工具，主要用于从带有特定格式注释的源代码中提取信息，自动生成结构化文档。它支持多种编程语言（如 C、C++、Java、Python 等），并能生成 HTML、PDF、LaTeX、RTF 等多种格式的文档。一般建议让 Doxygen 只看头文件，避免扫描 .c/.cpp 文件中重复定义。\n">
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -290,30 +290,10 @@
     <li><a href="#验证与使用">验证与使用</a></li>
     <li><a href="#常见问题与解决办法">常见问题与解决办法</a>
       <ol>
-        <li><a href="#函数指针或数组参数被错误解析为基础类型">函数指针或数组参数被错误解析为基础类型</a>
-          <ol>
-            <li><a href="#-问题描述">❓ 问题描述</a></li>
-            <li><a href="#-解决办法">✅ 解决办法</a></li>
-          </ol>
-        </li>
-        <li><a href="#2-函数使用-__attribute__-报错">2. 函数使用 <code>__attribute__</code> 报错</a>
-          <ol>
-            <li><a href="#-问题描述-1">❓ 问题描述</a></li>
-            <li><a href="#-解决办法-1">✅ 解决办法</a></li>
-          </ol>
-        </li>
-        <li><a href="#3-duplicate-c-declaration-警告结构体重复声明">3. <code>Duplicate C++ declaration</code> 警告：结构体重复声明</a>
-          <ol>
-            <li><a href="#-问题描述-2">❓ 问题描述</a></li>
-            <li><a href="#-解决办法-2">✅ 解决办法</a></li>
-          </ol>
-        </li>
-        <li><a href="#4-清理缓存以解决重复定义或无效变更">4. 清理缓存以解决重复定义或无效变更</a>
-          <ol>
-            <li><a href="#-问题描述-3">❓ 问题描述</a></li>
-            <li><a href="#-解决办法-3">✅ 解决办法</a></li>
-          </ol>
-        </li>
+        <li><a href="#函数指针或数组参数被错误解析为基础类型">函数指针或数组参数被错误解析为基础类型</a></li>
+        <li><a href="#函数使用-__attribute__-报错">函数使用 <code>__attribute__</code> 报错</a></li>
+        <li><a href="#duplicate-c-declaration-警告结构体重复声明"><code>Duplicate C++ declaration</code> 警告：结构体重复声明</a></li>
+        <li><a href="#4-清理缓存以解决重复定义或无效变更">4. 清理缓存以解决重复定义或无效变更</a></li>
       </ol>
     </li>
   </ol>
@@ -371,7 +351,7 @@
 
 
                 <time>
-                    May 28, 2025 09:24 UTC
+                    May 28, 2025 09:50 UTC
                 </time>
             </div>
     </footer>
@@ -574,8 +554,8 @@
 </div>
 </div><h2 id="常见问题与解决办法">常见问题与解决办法
 </h2><h3 id="函数指针或数组参数被错误解析为基础类型">函数指针或数组参数被错误解析为基础类型
-</h3><h4 id="-问题描述">❓ 问题描述
-</h4><p>函数声明如下：</p>
+</h3><p>❓ 问题描述</p>
+<p>函数声明如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -594,8 +574,8 @@
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>input_buffer[]</code> 被错误解析为 <code>nn_tensor</code>，造成文档描述不准确。</p>
-<h4 id="-解决办法">✅ 解决办法
-</h4><p>确保 <code>Doxygen</code> 配置文件中启用以下选项：</p>
+<p>✅ 解决办法</p>
+<p>确保 <code>Doxygen</code> 配置文件中启用以下选项：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -607,9 +587,9 @@
 </div><p>该选项告诉 Doxygen 以 C 语言语法风格解析参数（特别是数组、指针和函数参数列表），避免将数组误解为单个类型。</p>
 <p>我的解决办法是通过将 <code>nn_tensor input_buffer[]</code> 改为 <code>nn_tensor *input_buffer</code></p>
 <hr>
-<h3 id="2-函数使用-__attribute__-报错">2. 函数使用 <code>__attribute__</code> 报错
-</h3><h4 id="-问题描述-1">❓ 问题描述
-</h4><p>定义如下函数：</p>
+<h3 id="函数使用-__attribute__-报错">函数使用 <code>__attribute__</code> 报错
+</h3><p>❓ 问题描述</p>
+<p>定义如下函数：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -631,8 +611,8 @@
 </span></span><span class="line"><span class="cl">Error in declarator or parameters-and-qualifiers
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h4 id="-解决办法-1">✅ 解决办法
-</h4><p>在 <code>Doxygen</code> 配置文件 <code>Doxyfile</code> 中添加：</p>
+</div><p>✅ 解决办法</p>
+<p>在 <code>Doxygen</code> 配置文件 <code>Doxyfile</code> 中添加：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -643,9 +623,9 @@
 </div>
 </div><p>这样 Doxygen 在预处理阶段会忽略 GNU 扩展的 <code>__attribute__</code>，避免解析失败。</p>
 <hr>
-<h3 id="3-duplicate-c-declaration-警告结构体重复声明">3. <code>Duplicate C++ declaration</code> 警告：结构体重复声明
-</h3><h4 id="-问题描述-2">❓ 问题描述
-</h4><p>当存在以下代码：</p>
+<h3 id="duplicate-c-declaration-警告结构体重复声明"><code>Duplicate C++ declaration</code> 警告：结构体重复声明
+</h3><p>❓ 问题描述</p>
+<p>当存在以下代码：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -667,8 +647,8 @@
 </span></span><span class="line"><span class="cl">Declaration is <span class="s1">&#39;.. cpp:type:: struct detection detection&#39;</span>.
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h4 id="-解决办法-2">✅ 解决办法
-</h4><p>在 <code>Doxyfile</code> 中添加：</p>
+</div><p>✅ 解决办法</p>
+<p>在 <code>Doxyfile</code> 中添加：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -705,10 +685,10 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="4-清理缓存以解决重复定义或无效变更">4. 清理缓存以解决重复定义或无效变更
-</h3><h4 id="-问题描述-3">❓ 问题描述
-</h4><p>明明修改了 <code>.h</code> 文件或 <code>Doxyfile</code>，但生成文档仍然出现旧的内容或重复定义。</p>
-<h4 id="-解决办法-3">✅ 解决办法
-</h4><p>清理生成目录：</p>
+</h3><p>❓ 问题描述</p>
+<p>明明修改了 <code>.h</code> 文件或 <code>Doxyfile</code>，但生成文档仍然出现旧的内容或重复定义。</p>
+<p>✅ 解决办法</p>
+<p>清理生成目录：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -754,7 +734,7 @@
 
 
         <span>
-            最后更新于 May 28, 2025 09:24 UTC
+            最后更新于 May 28, 2025 09:50 UTC
         </span>
     </section></footer>
 
