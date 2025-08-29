@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="git 常用命令 初始化 初始化一个仓库并提交\n1 2 3 4 5 6 git init git remote add origin https://gitlink.com/yourusername/repo.git git pull --rebase origin master git push -u origin master # 或 git push -u origin main git config --global user.name &#34;Your Name&#34; git config --global user.email &#34;your@email.com&#34; submodule 下载 下载带有 submodule 的仓库\n1 2 3 git clone --recursive &lt;主仓库地址&gt; # 或 git clone --recurse-submodules &lt;主仓库地址&gt; 添加 添加一个子模块到仓库：\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="git 常用命令 初始化 初始化一个仓库并提交\n1 2 3 4 5 6 git init git remote add origin https://gitlink.com/yourusername/repo.git git pull --rebase origin master git push -u origin master # 或 git push -u origin main git config --global user.name &#34;Your Name&#34; git config --global user.email &#34;your@email.com&#34; 合并不相关内容的提交 1 git pull --rebase submodule 下载 下载带有 submodule 的仓库\n">
 <title>Git常用命令</title>
 
 <link rel='canonical' href='https://xenithya.github.io/p/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/'>
 
 <link rel="stylesheet" href="/scss/style.min.946cca6c6259ef94ac55abfae7c7bf3291ea3ed5eea17ef77500b257217c6710.css"><meta property='og:title' content="Git常用命令">
-<meta property='og:description' content="git 常用命令 初始化 初始化一个仓库并提交\n1 2 3 4 5 6 git init git remote add origin https://gitlink.com/yourusername/repo.git git pull --rebase origin master git push -u origin master # 或 git push -u origin main git config --global user.name &#34;Your Name&#34; git config --global user.email &#34;your@email.com&#34; submodule 下载 下载带有 submodule 的仓库\n1 2 3 git clone --recursive &lt;主仓库地址&gt; # 或 git clone --recurse-submodules &lt;主仓库地址&gt; 添加 添加一个子模块到仓库：\n">
+<meta property='og:description' content="git 常用命令 初始化 初始化一个仓库并提交\n1 2 3 4 5 6 git init git remote add origin https://gitlink.com/yourusername/repo.git git pull --rebase origin master git push -u origin master # 或 git push -u origin main git config --global user.name &#34;Your Name&#34; git config --global user.email &#34;your@email.com&#34; 合并不相关内容的提交 1 git pull --rebase submodule 下载 下载带有 submodule 的仓库\n">
 <meta property='og:url' content='https://xenithya.github.io/p/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/'>
 <meta property='og:site_name' content='Xenithya的博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-04-25T16:26:50&#43;08:00'/><meta property='article:modified_time' content='2025-05-29T03:00:20&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-04-25T16:26:50&#43;08:00'/><meta property='article:modified_time' content='2025-08-29T07:51:58&#43;00:00'/>
 <meta name="twitter:title" content="Git常用命令">
-<meta name="twitter:description" content="git 常用命令 初始化 初始化一个仓库并提交\n1 2 3 4 5 6 git init git remote add origin https://gitlink.com/yourusername/repo.git git pull --rebase origin master git push -u origin master # 或 git push -u origin main git config --global user.name &#34;Your Name&#34; git config --global user.email &#34;your@email.com&#34; submodule 下载 下载带有 submodule 的仓库\n1 2 3 git clone --recursive &lt;主仓库地址&gt; # 或 git clone --recurse-submodules &lt;主仓库地址&gt; 添加 添加一个子模块到仓库：\n">
+<meta name="twitter:description" content="git 常用命令 初始化 初始化一个仓库并提交\n1 2 3 4 5 6 git init git remote add origin https://gitlink.com/yourusername/repo.git git pull --rebase origin master git push -u origin master # 或 git push -u origin main git config --global user.name &#34;Your Name&#34; git config --global user.email &#34;your@email.com&#34; 合并不相关内容的提交 1 git pull --rebase submodule 下载 下载带有 submodule 的仓库\n">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -267,13 +267,18 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#初始化">初始化</a></li>
+    <li><a href="#初始化">初始化</a>
+      <ol>
+        <li><a href="#合并不相关内容的提交">合并不相关内容的提交</a></li>
+      </ol>
+    </li>
     <li><a href="#submodule">submodule</a>
       <ol>
         <li><a href="#下载">下载</a></li>
         <li><a href="#添加">添加</a></li>
         <li><a href="#删除">删除</a></li>
         <li><a href="#更新">更新</a></li>
+        <li><a href="#查看有哪些子模块">查看有哪些子模块</a></li>
       </ol>
     </li>
     <li><a href="#分支">分支</a>
@@ -284,11 +289,23 @@
         <li><a href="#查看本地分支">查看本地分支</a></li>
         <li><a href="#查看本地--远程分支">查看本地 + 远程分支</a></li>
         <li><a href="#查看远程分支仅远程">查看远程分支（仅远程）</a></li>
+        <li><a href="#本地分支与远程分支对齐">本地分支与远程分支对齐</a></li>
+        <li><a href="#回退版本">回退版本</a></li>
+      </ol>
+    </li>
+    <li><a href="#创建版本-tag">创建版本 tag</a>
+      <ol>
+        <li><a href="#1-创建版本-tag主仓库--子模块一起">1️⃣ 创建版本 tag（主仓库 + 子模块一起）</a></li>
+        <li><a href="#2-下载clone-带子模块和-tag-的版本">2️⃣ 下载（clone 带子模块和 tag 的版本）</a></li>
+        <li><a href="#3-可选验证子模块确实在-tag-上">3️⃣ （可选验证）子模块确实在 tag 上</a></li>
+        <li><a href="#删除-tag">删除 tag</a></li>
+        <li><a href="#看主仓库当前指向的子模块提交">看主仓库当前指向的子模块提交</a></li>
       </ol>
     </li>
     <li><a href="#其他">其他</a>
       <ol>
         <li><a href="#删除远程仓库中的文件夹">删除远程仓库中的文件夹</a></li>
+        <li><a href="#让-git-不再跟踪-makefile">让 Git 不再跟踪 Makefile</a></li>
       </ol>
     </li>
   </ol>
@@ -346,7 +363,7 @@
 
 
                 <time>
-                    May 29, 2025 03:00 UTC
+                    Aug 29, 2025 07:51 UTC
                 </time>
             </div>
     </footer>
@@ -381,6 +398,15 @@
 </span></span><span class="line"><span class="cl">git config --global user.email <span class="s2">&#34;your@email.com&#34;</span>
 </span></span></code></pre></td></tr></table>
 </div>
+</div><h3 id="合并不相关内容的提交">合并不相关内容的提交
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git pull --rebase
+</span></span></code></pre></td></tr></table>
+</div>
 </div><h2 id="submodule">submodule
 </h2><h3 id="下载">下载
 </h3><p>下载带有 submodule 的仓库</p>
@@ -408,6 +434,23 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git submodule add https://github.com/user/lib-example.git libs/external
 </span></span><span class="line"><span class="cl">git add .gitmodules libs/external  <span class="c1"># 添加子模块元数据及目录</span>
 </span></span><span class="line"><span class="cl">git commit -m <span class="s2">&#34;feat: 添加子模块 lib-example&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>添加子模块并指定分支</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git submodule add -b dev https://example.com/repo-b.git path/to/submodule
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">git add .gitmodules path/to/submodule
+</span></span><span class="line"><span class="cl">git commit -m <span class="s2">&#34;Add submodule repo-b using &#39;dev&#39; branch&#34;</span>
+</span></span><span class="line"><span class="cl">git push
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="删除">删除
@@ -475,6 +518,15 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git clone --recurse-submodules https://github.com/your/main-repo.git
 </span></span></code></pre></td></tr></table>
 </div>
+</div><p>或者克隆后执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git submodule update --init --recursive
+</span></span></code></pre></td></tr></table>
+</div>
 </div><ul>
 <li>参数 &ndash;recurse-submodules 会同步子模块的最新提交（基于主仓库记录的ID）</li>
 </ul>
@@ -485,6 +537,34 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git submodule status
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>子模块内容更新后同步到主仓库</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> submodule_name
+</span></span><span class="line"><span class="cl">git pull origin dev   <span class="c1"># 拉取最新代码</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ..
+</span></span><span class="line"><span class="cl">git add submodule_name
+</span></span><span class="line"><span class="cl">git commit -m <span class="s2">&#34;Update submodule to latest dev&#34;</span>
+</span></span><span class="line"><span class="cl">git push
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="查看有哪些子模块">查看有哪些子模块
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git config --file .gitmodules --get-regexp path
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="分支">分支
@@ -608,8 +688,209 @@
           <td><code>git branch --no-merged</code></td>
           <td>查看未合并到当前分支的分支</td>
       </tr>
+      <tr>
+          <td><code>git branch -vv</code></td>
+          <td>检查所有本地分支是否追踪远程</td>
+      </tr>
   </tbody>
 </table></div>
+<h3 id="本地分支与远程分支对齐">本地分支与远程分支对齐
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git checkout -b dev origin/dev
+</span></span><span class="line"><span class="cl">git checkout -b arm_linux origin/arm_linux
+</span></span><span class="line"><span class="cl">git checkout -b dsp_bare origin/dsp_bare
+</span></span><span class="line"><span class="cl">git checkout -b dsp_rtt origin/dsp_rtt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="回退版本">回退版本
+</h3><p>强制回退</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 查看历史</span>
+</span></span><span class="line"><span class="cl">git log --oneline
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 回退到某版本</span>
+</span></span><span class="line"><span class="cl">git reset --hard &lt;commit_id&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 强制推送（危险操作）</span>
+</span></span><span class="line"><span class="cl">git push origin HEAD --force
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>软回退（不破坏历史），也可以用 revert</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git revert &lt;commit_id&gt;  <span class="c1"># 撤销一个特定提交，但保留提交历史</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="创建版本-tag">创建版本 tag
+</h2><p><strong>主仓库和子模块都打 tag</strong>，并且主仓库在这个 tag 上锁定子模块的 tag 对应的 commit。</p>
+<h3 id="1-创建版本-tag主仓库--子模块一起">1️⃣ 创建版本 tag（主仓库 + 子模块一起）
+</h3><p>假设你现在主仓库是 <code>app_linux_arm</code>，有子模块 <code>pnna_driver</code> 和 <code>examples</code>。</p>
+<p>步骤</p>
+<ol>
+<li>
+<p>进入每个子模块，打 tag：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> pnna_driver
+</span></span><span class="line"><span class="cl">git checkout main   <span class="c1"># 或你开发的分支</span>
+</span></span><span class="line"><span class="cl">git pull origin main
+</span></span><span class="line"><span class="cl">git tag v20250829-driver
+</span></span><span class="line"><span class="cl">git push origin v20250829-driver
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ../examples
+</span></span><span class="line"><span class="cl">git checkout main
+</span></span><span class="line"><span class="cl">git pull origin main
+</span></span><span class="line"><span class="cl">git tag v20250829-examples
+</span></span><span class="line"><span class="cl">git push origin v20250829-examples
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>回到主仓库，确保子模块都指向刚才的 tag：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> ..
+</span></span><span class="line"><span class="cl">git add pnna_driver examples
+</span></span><span class="line"><span class="cl">git commit -m <span class="s2">&#34;Lock submodules to v20250829-driver and v20250829-examples&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>给主仓库打 tag：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git tag v20250829
+</span></span><span class="line"><span class="cl">git push origin v20250829
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<p>这样就保证：</p>
+<ul>
+<li><code>app_linux_arm@v20250829</code> 固定指向某个 commit；</li>
+<li>这个 commit 里，<code>pnna_driver</code> 和 <code>examples</code> 也固定到对应 tag 的 commit。
+→ 完全可复现 ✅。</li>
+</ul>
+<h3 id="2-下载clone-带子模块和-tag-的版本">2️⃣ 下载（clone 带子模块和 tag 的版本）
+</h3><p>用户（或者你自己换电脑）需要获取这个固定版本，只需：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git clone --branch v20250829 --recurse-submodules https://gitlink.org.cn/nudt_dsp/app_linux_arm.git
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后子模块会被自动 checkout 到主仓库记录的 commit（也就是你当时打 tag 时的 commit）。</p>
+<h3 id="3-可选验证子模块确实在-tag-上">3️⃣ （可选验证）子模块确实在 tag 上
+</h3><p>进入子模块验证：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> pnna_driver
+</span></span><span class="line"><span class="cl">git describe --tags
+</span></span><span class="line"><span class="cl"><span class="c1"># 应该输出 v20250829-driver</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ../examples
+</span></span><span class="line"><span class="cl">git describe --tags
+</span></span><span class="line"><span class="cl"><span class="c1"># 应该输出 v20250829-examples</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="删除-tag">删除 tag
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 删除本地</span>
+</span></span><span class="line"><span class="cl">git tag -d v20250829
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 删除远程</span>
+</span></span><span class="line"><span class="cl">git push origin :refs/tags/v20250829
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="看主仓库当前指向的子模块提交">看主仓库当前指向的子模块提交
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git submodule status
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>输出形如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="w"> </span><span class="n">be7fa48</span><span class="w"> </span><span class="nf">examples</span><span class="w"> </span><span class="p">(</span><span class="n">v20250829</span><span class="o">-</span><span class="n">examples</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">1a2b3c4</span><span class="w"> </span><span class="nf">pnna_driver</span><span class="w"> </span><span class="p">(</span><span class="n">v20250829</span><span class="o">-</span><span class="n">driver</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>✅ 总结：</p>
+<ul>
+<li><strong>子模块打 tag</strong> → 有独立版本号，方便复用；</li>
+<li><strong>主仓库打 tag 并提交子模块指针</strong> → 锁定依赖关系；</li>
+<li><strong>clone 时带 <code>--recurse-submodules</code></strong> → 能完整复现当时环境。</li>
+</ul>
+<hr>
 <h2 id="其他">其他
 </h2><h3 id="删除远程仓库中的文件夹">删除远程仓库中的文件夹
 </h3><p>​​若 .vscode 已存在于 .gitignore 但未被忽略​​
@@ -629,6 +910,80 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过以上步骤，即可精准删除远程仓库的 .vscode 文件夹，同时保留本地配置</p>
+<h3 id="让-git-不再跟踪-makefile">让 Git 不再跟踪 Makefile
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 验证 Makefile 是否被追踪</span>
+</span></span><span class="line"><span class="cl">git ls-files <span class="p">|</span> grep Makefile
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 1. 移除已有文件的 Git 跟踪</span>
+</span></span><span class="line"><span class="cl">git rm --cached Makefile
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2. 确保 .gitignore 中有写：</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Makefile&#34;</span> &gt;&gt; .gitignore
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 3. 提交更新</span>
+</span></span><span class="line"><span class="cl">git add .gitignore
+</span></span><span class="line"><span class="cl">git commit -m <span class="s2">&#34;Ignore Makefile&#34;</span>
+</span></span><span class="line"><span class="cl">git push
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>让本地修改 Makefile，但不被提交:
+使用 Git 的 assume-unchanged 标志（适合不希望本地改动被 Git 检测到）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git update-index --assume-unchanged Makefile
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此命令的作用是：
+告诉 Git：“我本地会改这个文件，但你别提醒我，也别把改动加入 commit。”</p>
+<p>💡 检查状态：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git ls-files -v <span class="p">|</span> grep Makefile
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>前面有小写 h 表示被标记为“assume unchanged”。</p>
+<p>🔁 若以后你又需要提交 Makefile 的改动，可以恢复跟踪：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git update-index --no-assume-unchanged Makefile
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果你只是不希望本地对 Makefile 的更改被提交，但远程还保留原始文件，你应该执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git update-index --assume-unchanged Makefile
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>而不是用 git rm &ndash;cached，否则会导致远程删除。</p>
 <hr>
 
 </section>
@@ -659,7 +1014,7 @@
 
 
         <span>
-            最后更新于 May 29, 2025 03:00 UTC
+            最后更新于 Aug 29, 2025 07:51 UTC
         </span>
     </section></footer>
 

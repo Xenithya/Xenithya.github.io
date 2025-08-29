@@ -2,18 +2,18 @@
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Lorem Ipsum Dolor Si Amet">
-<title>占位符文本</title>
+<title>VSCode &amp;&amp; Git</title>
 
-<link rel='canonical' href='https://xenithya.github.io/p/%E5%8D%A0%E4%BD%8D%E7%AC%A6%E6%96%87%E6%9C%AC/'>
+<link rel='canonical' href='https://xenithya.github.io/p/vscode-git/'>
 
-<link rel="stylesheet" href="/scss/style.min.946cca6c6259ef94ac55abfae7c7bf3291ea3ed5eea17ef77500b257217c6710.css"><meta property='og:title' content="占位符文本">
+<link rel="stylesheet" href="/scss/style.min.946cca6c6259ef94ac55abfae7c7bf3291ea3ed5eea17ef77500b257217c6710.css"><meta property='og:title' content="VSCode && Git">
 <meta property='og:description' content="Lorem Ipsum Dolor Si Amet">
-<meta property='og:url' content='https://xenithya.github.io/p/%E5%8D%A0%E4%BD%8D%E7%AC%A6%E6%96%87%E6%9C%AC/'>
+<meta property='og:url' content='https://xenithya.github.io/p/vscode-git/'>
 <meta property='og:site_name' content='Xenithya的博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='markdown' /><meta property='article:tag' content='text' /><meta property='article:tag' content='tag with whitespaces' /><meta property='article:published_time' content='2019-03-09T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-05-29T03:00:20&#43;00:00'/><meta property='og:image' content='https://xenithya.github.io/p/%E5%8D%A0%E4%BD%8D%E7%AC%A6%E6%96%87%E6%9C%AC/matt-le-SJSpo9hQf7s-unsplash.jpg' />
-<meta name="twitter:title" content="占位符文本">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='markdown' /><meta property='article:tag' content='text' /><meta property='article:tag' content='tag with whitespaces' /><meta property='article:published_time' content='2019-03-09T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-08-29T07:51:58&#43;00:00'/><meta property='og:image' content='https://xenithya.github.io/p/vscode-git/matt-le-SJSpo9hQf7s-unsplash.jpg' />
+<meta name="twitter:title" content="VSCode && Git">
 <meta name="twitter:description" content="Lorem Ipsum Dolor Si Amet"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://xenithya.github.io/p/%E5%8D%A0%E4%BD%8D%E7%AC%A6%E6%96%87%E6%9C%AC/matt-le-SJSpo9hQf7s-unsplash.jpg' />
+    <meta name="twitter:image" content='https://xenithya.github.io/p/vscode-git/matt-le-SJSpo9hQf7s-unsplash.jpg' />
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -268,7 +268,14 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#mane-refeci-capiebant-unda-mulcebat">Mane refeci capiebant unda mulcebat</a></li>
+    <li><a href="#-最推荐的解决方式配置-ssh-密钥登录-git-仓库">✅ 最推荐的解决方式：<strong>配置 SSH 密钥登录 Git 仓库</strong></a></li>
+    <li><a href="#-步骤一检查你使用的是-https-还是-ssh">🧩 步骤一：检查你使用的是 HTTPS 还是 SSH</a></li>
+    <li><a href="#-步骤二生成-ssh-密钥如果你还没有">🛠️ 步骤二：生成 SSH 密钥（如果你还没有）</a></li>
+    <li><a href="#-步骤三将-ssh-公钥添加到远程仓库平台如-gitlinkgithubgitee">🔗 步骤三：将 SSH 公钥添加到远程仓库平台（如 GitLink、GitHub、Gitee）</a></li>
+    <li><a href="#-步骤四修改-git-远程地址为-ssh-格式">🔄 步骤四：修改 Git 远程地址为 SSH 格式</a></li>
+    <li><a href="#-步骤五测试是否成功">🧪 步骤五：测试是否成功</a></li>
+    <li><a href="#-补充可选方式启用-git-凭据缓存仅适用于-https">💡 补充（可选方式）：启用 Git 凭据缓存（仅适用于 HTTPS）</a></li>
+    <li><a href="#-推荐方案总结">✅ 推荐方案总结</a></li>
   </ol>
 </nav>
         </div>
@@ -283,13 +290,13 @@
     <article class="has-image main-article">
     <header class="article-header">
         <div class="article-image">
-            <a href="/p/%E5%8D%A0%E4%BD%8D%E7%AC%A6%E6%96%87%E6%9C%AC/">
-                <img src="/p/%E5%8D%A0%E4%BD%8D%E7%AC%A6%E6%96%87%E6%9C%AC/matt-le-SJSpo9hQf7s-unsplash_hu_35cb8ebf5fe9ea03.jpg"
-                        srcset="/p/%E5%8D%A0%E4%BD%8D%E7%AC%A6%E6%96%87%E6%9C%AC/matt-le-SJSpo9hQf7s-unsplash_hu_35cb8ebf5fe9ea03.jpg 800w, /p/%E5%8D%A0%E4%BD%8D%E7%AC%A6%E6%96%87%E6%9C%AC/matt-le-SJSpo9hQf7s-unsplash_hu_82f8de9742c8486f.jpg 1600w"
+            <a href="/p/vscode-git/">
+                <img src="/p/vscode-git/matt-le-SJSpo9hQf7s-unsplash_hu_35cb8ebf5fe9ea03.jpg"
+                        srcset="/p/vscode-git/matt-le-SJSpo9hQf7s-unsplash_hu_35cb8ebf5fe9ea03.jpg 800w, /p/vscode-git/matt-le-SJSpo9hQf7s-unsplash_hu_82f8de9742c8486f.jpg 1600w"
                         width="800" 
                         height="533" 
                         loading="lazy"
-                        alt="Featured image of post 占位符文本" />
+                        alt="Featured image of post VSCode &amp;&amp; Git" />
                 
             </a>
         </div>
@@ -312,7 +319,7 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/%E5%8D%A0%E4%BD%8D%E7%AC%A6%E6%96%87%E6%9C%AC/">占位符文本</a>
+            <a href="/p/vscode-git/">VSCode &amp;&amp; Git</a>
         </h2>
     
         
@@ -352,7 +359,7 @@
 
 
                 <time>
-                    May 29, 2025 03:00 UTC
+                    Aug 29, 2025 07:51 UTC
                 </time>
             </div>
     </footer>
@@ -366,30 +373,159 @@
     <section class="article-content">
     
     
-    <p>Lorem est tota propiore conpellat pectoribus de pectora summo.</p>
-<p>Redit teque digerit hominumque toris verebor lumina non cervice subde tollit usus habet Arctonque, furores quas nec ferunt. Quoque montibus nunc caluere tempus inhospita parcite confusaque translucet patri vestro qui optatis lumine cognoscere flos nubis! Fronde ipsamque patulos Dryopen deorum.</p>
+    <h1 id="vscode--git">VSCode &amp;&amp; Git
+</h1><p>你在 VSCode 中每次提交/推送代码都要输入用户名和密码，这通常说明你的 Git 没有配置凭据缓存或没有使用 SSH key。</p>
+<h2 id="-最推荐的解决方式配置-ssh-密钥登录-git-仓库">✅ 最推荐的解决方式：<strong>配置 SSH 密钥登录 Git 仓库</strong>
+</h2><p>这样你推送时不再需要输入用户名和密码。</p>
+<h2 id="-步骤一检查你使用的是-https-还是-ssh">🧩 步骤一：检查你使用的是 HTTPS 还是 SSH
+</h2><p>打开 VSCode 的终端（或命令行）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git remote -v
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>输出类似这样说明你是用 HTTPS（每次都需要账号密码）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">origin https://gitlink.org.cn/yourname/yourrepo.git <span class="o">(</span>fetch<span class="o">)</span>
+</span></span><span class="line"><span class="cl">origin https://gitlink.org.cn/yourname/yourrepo.git <span class="o">(</span>push<span class="o">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>建议：换成 SSH</strong></p>
+<h2 id="-步骤二生成-ssh-密钥如果你还没有">🛠️ 步骤二：生成 SSH 密钥（如果你还没有）
+</h2><p>在终端执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh-keygen -t rsa -b <span class="m">4096</span> -C <span class="s2">&#34;your_email@example.com&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>按提示选择路径（默认 <code>~/.ssh/id_rsa</code>）并设置密码（或留空）。</p>
+<p>生成后，执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat ~/.ssh/id_rsa.pub
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>复制这段 <strong>公钥内容</strong>。</p>
+<hr>
+<h2 id="-步骤三将-ssh-公钥添加到远程仓库平台如-gitlinkgithubgitee">🔗 步骤三：将 SSH 公钥添加到远程仓库平台（如 GitLink、GitHub、Gitee）
+</h2><p>以 GitLink 为例：</p>
 <ol>
-<li>Exierant elisi ambit vivere dedere</li>
-<li>Duce pollice</li>
-<li>Eris modo</li>
-<li>Spargitque ferrea quos palude</li>
+<li>登录 <a class="link" href="https://gitlink.org.cn"  target="_blank" rel="noopener"
+    >https://gitlink.org.cn</a></li>
+<li>点击右上角头像 → 设置 → SSH公钥</li>
+<li>添加你复制的 <code>id_rsa.pub</code> 内容</li>
 </ol>
-<p>Rursus nulli murmur; hastile inridet ut ab gravi sententia! Nomine potitus silentia flumen, sustinet placuit petis in dilapsa erat sunt. Atria tractus malis.</p>
-<ol>
-<li>Comas hunc haec pietate fetum procerum dixit</li>
-<li>Post torum vates letum Tiresia</li>
-<li>Flumen querellas</li>
-<li>Arcanaque montibus omnes</li>
-<li>Quidem et</li>
-</ol>
-<h1 id="vagus-elidunt">Vagus elidunt
-</h1><p><svg class="canon" xmlns="http://www.w3.org/2000/svg" overflow="visible" viewBox="0 0 496 373" height="373" width="496"><g fill="none"><path stroke="#000" stroke-width=".75" d="M.599 372.348L495.263 1.206M.312.633l494.95 370.853M.312 372.633L247.643.92M248.502.92l246.76 370.566M330.828 123.869V1.134M330.396 1.134L165.104 124.515"></path><path stroke="#ED1C24" stroke-width=".75" d="M275.73 41.616h166.224v249.05H275.73zM54.478 41.616h166.225v249.052H54.478z"></path><path stroke="#000" stroke-width=".75" d="M.479.375h495v372h-495zM247.979.875v372"></path><ellipse cx="498.729" cy="177.625" rx=".75" ry="1.25"></ellipse><ellipse cx="247.229" cy="377.375" rx=".75" ry="1.25"></ellipse></g></svg></p>
-<p><a class="link" href="https://en.wikipedia.org/wiki/Canons_of_page_construction#Van_de_Graaf_canon"  target="_blank" rel="noopener"
-    >The Van de Graaf Canon</a></p>
-<h2 id="mane-refeci-capiebant-unda-mulcebat">Mane refeci capiebant unda mulcebat
-</h2><p>Victa caducifer, malo vulnere contra dicere aurato, ludit regale, voca! Retorsit colit est profanae esse virescere furit nec; iaculi matertera et visa est, viribus. Divesque creatis, tecta novat collumque vulnus est, parvas. <strong>Faces illo pepulere</strong> tempus adest. Tendit flamma, ab opes virum sustinet, sidus sequendo urbis.</p>
-<p>Iubar proles corpore raptos vero auctor imperium; sed et huic: manus caeli Lelegas tu lux. Verbis obstitit intus oblectamina fixis linguisque ausus sperare Echionides cornuaque tenent clausit possit. Omnia putatur. Praeteritae refert ausus; ferebant e primus lora nutat, vici quae mea ipse. Et iter nil spectatae vulnus haerentia iuste et exercebat, sui et.</p>
-<p>Eurytus Hector, materna ipsumque ut Politen, nec, nate, ignari, vernum cohaesit sequitur. Vel <strong>mitis temploque</strong> vocatus, inque alis, <em>oculos nomen</em> non silvis corpore coniunx ne displicet illa. Crescunt non unus, vidit visa quantum inmiti flumina mortis facto sic: undique a alios vincula sunt iactata abdita! Suspenderat ego fuit tendit: luna, ante urbem Propoetides <strong>parte</strong>.</p>
+<hr>
+<h2 id="-步骤四修改-git-远程地址为-ssh-格式">🔄 步骤四：修改 Git 远程地址为 SSH 格式
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git remote set-url origin git@gitlink.org.cn:nudt_dsp/yourrepo.git
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>再次检查确认：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git remote -v
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>输出应变为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">origin git@gitlink.org.cn:nudt_dsp/yourrepo.git <span class="o">(</span>fetch<span class="o">)</span>
+</span></span><span class="line"><span class="cl">origin git@gitlink.org.cn:nudt_dsp/yourrepo.git <span class="o">(</span>push<span class="o">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="-步骤五测试是否成功">🧪 步骤五：测试是否成功
+</h2><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git push
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果你首次用 SSH 会提示确认 <code>gitlink.org.cn</code> 的 host key，输入 <code>yes</code> 即可。之后就不会再提示用户名和密码了。</p>
+<hr>
+<h2 id="-补充可选方式启用-git-凭据缓存仅适用于-https">💡 补充（可选方式）：启用 Git 凭据缓存（仅适用于 HTTPS）
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git config --global credential.helper store
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后执行一次：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git push
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>输入一次用户名和密码后，Git 会将其<strong>明文保存在本地磁盘</strong>（风险较高，不推荐用于公司电脑或公共机）。</p>
+<hr>
+<h2 id="-推荐方案总结">✅ 推荐方案总结
+</h2><div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>方法</th>
+          <th>是否推荐</th>
+          <th>安全性</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>使用 SSH key（推荐）</td>
+          <td>✅ 强烈推荐</td>
+          <td>高</td>
+          <td>一次设置终身免输</td>
+      </tr>
+      <tr>
+          <td>使用 HTTPS + 凭据缓存</td>
+          <td>⚠️ 一般</td>
+          <td>较低</td>
+          <td>明文保存，风险较大</td>
+      </tr>
+      <tr>
+          <td>每次输入用户名密码</td>
+          <td>❌ 不推荐</td>
+          <td>高</td>
+          <td>太麻烦</td>
+      </tr>
+  </tbody>
+</table></div>
+<hr>
+<p>如果你是在公司网络、用的是 Windows、Mac 或 Linux，我可以提供更具体的脚本或配置。需要的话告诉我系统平台即可。</p>
+
 </section>
 
 
@@ -428,7 +564,7 @@
 
 
         <span>
-            最后更新于 May 29, 2025 03:00 UTC
+            最后更新于 Aug 29, 2025 07:51 UTC
         </span>
     </section></footer>
 
