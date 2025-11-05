@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Lorem Ipsum Dolor Si Amet">
-<title>VSCode &amp;&amp; Git</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="rtconfig.py 说明：此文档基于 rtconfig.py 的整理而成。包含每一项编译参数详解（逐项、逐标志说明）\n基本元信息 ARCH = 'arm'\n表示目标架构为 ARM。 CPU = 'cortex-a15'\n目标 CPU 型号（用于优化与 -mcpu 指定）。 CROSS_TOOL = 'gcc' / PLATFORM = 'gcc'\n">
+<title>Rtconfig_explanation</title>
 
-<link rel='canonical' href='https://xenithya.github.io/p/vscode-git/'>
+<link rel='canonical' href='https://xenithya.github.io/p/rtconfig_explanation/'>
 
-<link rel="stylesheet" href="/scss/style.min.6a692fd055deae459f2a9767f57f3855ba80cafd5041317f24f7360f6ca47cdf.css"><meta property='og:title' content="VSCode && Git">
-<meta property='og:description' content="Lorem Ipsum Dolor Si Amet">
-<meta property='og:url' content='https://xenithya.github.io/p/vscode-git/'>
+<link rel="stylesheet" href="/scss/style.min.6a692fd055deae459f2a9767f57f3855ba80cafd5041317f24f7360f6ca47cdf.css"><meta property='og:title' content="Rtconfig_explanation">
+<meta property='og:description' content="rtconfig.py 说明：此文档基于 rtconfig.py 的整理而成。包含每一项编译参数详解（逐项、逐标志说明）\n基本元信息 ARCH = 'arm'\n表示目标架构为 ARM。 CPU = 'cortex-a15'\n目标 CPU 型号（用于优化与 -mcpu 指定）。 CROSS_TOOL = 'gcc' / PLATFORM = 'gcc'\n">
+<meta property='og:url' content='https://xenithya.github.io/p/rtconfig_explanation/'>
 <meta property='og:site_name' content='Xenithya的博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='markdown' /><meta property='article:tag' content='text' /><meta property='article:tag' content='tag with whitespaces' /><meta property='article:published_time' content='2019-03-09T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-11-05T07:50:11&#43;00:00'/><meta property='og:image' content='https://xenithya.github.io/p/vscode-git/matt-le-SJSpo9hQf7s-unsplash.jpg' />
-<meta name="twitter:title" content="VSCode && Git">
-<meta name="twitter:description" content="Lorem Ipsum Dolor Si Amet"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://xenithya.github.io/p/vscode-git/matt-le-SJSpo9hQf7s-unsplash.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-11-05T15:40:47&#43;08:00'/><meta property='article:modified_time' content='2025-11-05T07:50:11&#43;00:00'/>
+<meta name="twitter:title" content="Rtconfig_explanation">
+<meta name="twitter:description" content="rtconfig.py 说明：此文档基于 rtconfig.py 的整理而成。包含每一项编译参数详解（逐项、逐标志说明）\n基本元信息 ARCH = 'arm'\n表示目标架构为 ARM。 CPU = 'cortex-a15'\n目标 CPU 型号（用于优化与 -mcpu 指定）。 CROSS_TOOL = 'gcc' / PLATFORM = 'gcc'\n">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -268,14 +267,20 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#-最推荐的解决方式配置-ssh-密钥登录-git-仓库">✅ 最推荐的解决方式：<strong>配置 SSH 密钥登录 Git 仓库</strong></a></li>
-    <li><a href="#-步骤一检查你使用的是-https-还是-ssh">🧩 步骤一：检查你使用的是 HTTPS 还是 SSH</a></li>
-    <li><a href="#-步骤二生成-ssh-密钥如果你还没有">🛠️ 步骤二：生成 SSH 密钥（如果你还没有）</a></li>
-    <li><a href="#-步骤三将-ssh-公钥添加到远程仓库平台如-gitlinkgithubgitee">🔗 步骤三：将 SSH 公钥添加到远程仓库平台（如 GitLink、GitHub、Gitee）</a></li>
-    <li><a href="#-步骤四修改-git-远程地址为-ssh-格式">🔄 步骤四：修改 Git 远程地址为 SSH 格式</a></li>
-    <li><a href="#-步骤五测试是否成功">🧪 步骤五：测试是否成功</a></li>
-    <li><a href="#-补充可选方式启用-git-凭据缓存仅适用于-https">💡 补充（可选方式）：启用 Git 凭据缓存（仅适用于 HTTPS）</a></li>
-    <li><a href="#-推荐方案总结">✅ 推荐方案总结</a></li>
+    <li><a href="#rtconfigpy">rtconfig.py</a>
+      <ol>
+        <li><a href="#基本元信息">基本元信息</a></li>
+        <li><a href="#工具链命令前缀与命令">工具链命令前缀与命令</a></li>
+        <li><a href="#device全局目标体系特性一般拼接到各类-flags">DEVICE（全局目标/体系特性，一般拼接到各类 flags）</a></li>
+        <li><a href="#cflags用于-c-文件编译">CFLAGS（用于 <code>.c</code> 文件编译）</a></li>
+        <li><a href="#aflags用于汇编文件-s--s">AFLAGS（用于汇编文件 <code>.S</code> / <code>.s</code>）</a></li>
+        <li><a href="#lflags链接选项">LFLAGS（链接选项）</a></li>
+        <li><a href="#dump_action-与-post_action构建后动作">DUMP_ACTION 与 POST_ACTION（构建后动作）</a></li>
+      </ol>
+    </li>
+    <li><a href="#关于浮点单元vfpv4-vs-neon-vfpv4的实践建议回顾">关于浮点单元（<code>vfpv4</code> vs <code>neon-vfpv4</code>）的实践建议（回顾）</a></li>
+    <li><a href="#常见问题速查faq">常见问题速查（FAQ）</a></li>
+    <li><a href="#六后续建议可选">六、后续建议（可选）</a></li>
   </ol>
 </nav>
         </div>
@@ -287,45 +292,17 @@
 
 
             <main class="main full-width">
-    <article class="has-image main-article">
+    <article class="main-article">
     <header class="article-header">
-        <div class="article-image">
-            <a href="/p/vscode-git/">
-                <img src="/p/vscode-git/matt-le-SJSpo9hQf7s-unsplash_hu_35cb8ebf5fe9ea03.jpg"
-                        srcset="/p/vscode-git/matt-le-SJSpo9hQf7s-unsplash_hu_35cb8ebf5fe9ea03.jpg 800w, /p/vscode-git/matt-le-SJSpo9hQf7s-unsplash_hu_82f8de9742c8486f.jpg 1600w"
-                        width="800" 
-                        height="533" 
-                        loading="lazy"
-                        alt="Featured image of post VSCode &amp;&amp; Git" />
-                
-            </a>
-        </div>
-    
 
     <div class="article-details">
-    
-    <header class="article-category">
-        
-            <a href="/categories/test/" style="background-color: #2a9d8f; color: #fff;">
-                Test
-            </a>
-        
-            <a href="/categories/test-with-whitespaces/" >
-                Test With Whitespaces
-            </a>
-        
-    </header>
     
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/vscode-git/">VSCode &amp;&amp; Git</a>
+            <a href="/p/rtconfig_explanation/">Rtconfig_explanation</a>
         </h2>
     
-        
-        <h3 class="article-subtitle">
-            Lorem Ipsum Dolor Si Amet
-        </h3>
         
     </div>
 
@@ -345,7 +322,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Mar 09, 2019</time>
+                <time class="article-time--published">Nov 05, 2025</time>
             </div>
         
 
@@ -373,174 +350,424 @@
     <section class="article-content">
     
     
-    <h1 id="vscode--git">VSCode &amp;&amp; Git
-</h1><p>你在 VSCode 中每次提交/推送代码都要输入用户名和密码，这通常说明你的 Git 没有配置凭据缓存或没有使用 SSH key。</p>
-<h2 id="-最推荐的解决方式配置-ssh-密钥登录-git-仓库">✅ 最推荐的解决方式：<strong>配置 SSH 密钥登录 Git 仓库</strong>
-</h2><p>这样你推送时不再需要输入用户名和密码。</p>
-<h2 id="-步骤一检查你使用的是-https-还是-ssh">🧩 步骤一：检查你使用的是 HTTPS 还是 SSH
-</h2><p>打开 VSCode 的终端（或命令行）：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git remote -v
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输出类似这样说明你是用 HTTPS（每次都需要账号密码）：</p>
+    <h2 id="rtconfigpy">rtconfig.py
+</h2><blockquote>
+<p>说明：此文档基于 <code>rtconfig.py</code> 的整理而成。包含每一项编译参数详解（逐项、逐标志说明）</p>
+</blockquote>
+<h3 id="基本元信息">基本元信息
+</h3><ul>
+<li>
+<p><code>ARCH = 'arm'</code></p>
+<ul>
+<li>表示目标架构为 ARM。</li>
+</ul>
+</li>
+<li>
+<p><code>CPU = 'cortex-a15'</code></p>
+<ul>
+<li>目标 CPU 型号（用于优化与 <code>-mcpu</code> 指定）。</li>
+</ul>
+</li>
+<li>
+<p><code>CROSS_TOOL = 'gcc'</code> / <code>PLATFORM = 'gcc'</code></p>
+<ul>
+<li>指定使用 GCC 家族的交叉工具链（SCons 脚本会据此选择命令模板）。</li>
+</ul>
+</li>
+<li>
+<p><code>BUILD = 'release'</code> 或 <code>'debug'</code></p>
+<ul>
+<li>构建模式开关：<code>debug</code> 启用符号与低优化；<code>release</code> 启用高优化、去除调试信息。</li>
+</ul>
+</li>
+<li>
+<p><code>EXEC_PATH</code></p>
+<ul>
+<li>工具链可执行文件目录（例如 <code>arm-none-eabi-gcc</code> 所在路径）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="工具链命令前缀与命令">工具链命令前缀与命令
+</h3><ul>
+<li>
+<p><code>PREFIX = 'arm-none-eabi-'</code></p>
+<ul>
+<li>工具链命令的前缀，最后构成 <code>arm-none-eabi-gcc</code>、<code>arm-none-eabi-ar</code> 等。</li>
+</ul>
+</li>
+<li>
+<p><code>CC = PREFIX + 'gcc'</code></p>
+<ul>
+<li>C/C++ 编译器命令（用于 <code>.c</code> 编译与链接）。</li>
+</ul>
+</li>
+<li>
+<p><code>AS = PREFIX + 'gcc'</code></p>
+<ul>
+<li>用 GCC 调用汇编器 (通常用 <code>gcc -x assembler-with-cpp</code> 去预处理并汇编 <code>.S</code>)；用 GCC 当作汇编器可以统一参数解析方式。</li>
+</ul>
+</li>
+<li>
+<p><code>AR = PREFIX + 'ar'</code></p>
+<ul>
+<li>归档工具（创建静态库 <code>.a</code>）。</li>
+</ul>
+</li>
+<li>
+<p><code>LINK = PREFIX + 'gcc'</code></p>
+<ul>
+<li>链接器前端，通常用 <code>gcc</code> 调用 <code>ld</code>，以便自动添加启动文件和标准库路径（若有）。</li>
+</ul>
+</li>
+<li>
+<p><code>SIZE</code>, <code>OBJDUMP</code>, <code>OBJCPY</code></p>
+<ul>
+<li><code>SIZE</code>：打印 ELF 大小；</li>
+<li><code>OBJDUMP</code>：反汇编/生成汇编视图；</li>
+<li><code>OBJCPY</code>：在编译后导出 <code>.bin</code>（或其他格式）。</li>
+</ul>
+</li>
+<li>
+<p><code>TARGET_EXT = 'elf'</code></p>
+<ul>
+<li>最终目标文件扩展名（ELF）。</li>
+</ul>
+</li>
+<li>
+<p><code>LINK_SCRIPT = 'link_ram.lds'</code></p>
+<ul>
+<li>链接脚本文件名，定义内存布局（.text/.data/.bss 等段放置）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="device全局目标体系特性一般拼接到各类-flags">DEVICE（全局目标/体系特性，一般拼接到各类 flags）
+</h3><p><code>DEVICE</code> 是对 CPU/浮点/编译器行为的集中声明，通常在 <code>CFLAGS/AFLAGS/LFLAGS</code> 中被复用。我们在重构版中将其写成：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">origin https://gitlink.org.cn/yourname/yourrepo.git <span class="o">(</span>fetch<span class="o">)</span>
-</span></span><span class="line"><span class="cl">origin https://gitlink.org.cn/yourname/yourrepo.git <span class="o">(</span>push<span class="o">)</span>
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">DEVICE = (
+</span></span><span class="line"><span class="cl">  &#39; -mcpu=cortex-a15&#39;
+</span></span><span class="line"><span class="cl">  &#39; -mfpu=neon-vfpv4&#39;   # or &#39;vfpv4&#39; 详见说明
+</span></span><span class="line"><span class="cl">  &#39; -mfloat-abi=hard&#39;
+</span></span><span class="line"><span class="cl">  &#39; -ftree-vectorize&#39;
+</span></span><span class="line"><span class="cl">  &#39; -ffast-math&#39;
+</span></span><span class="line"><span class="cl">  &#39; -funwind-tables&#39;
+</span></span><span class="line"><span class="cl">  &#39; -fno-strict-aliasing&#39;
+</span></span><span class="line"><span class="cl">)
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p><strong>建议：换成 SSH</strong></p>
-<h2 id="-步骤二生成-ssh-密钥如果你还没有">🛠️ 步骤二：生成 SSH 密钥（如果你还没有）
-</h2><p>在终端执行：</p>
+</div><p>以下为每个子项逐条解释：</p>
+<ul>
+<li>
+<p><code>-mcpu=cortex-a15</code></p>
+<ul>
+<li>指定目标 CPU，允许编译器生成针对该 CPU 的指令序列与调度策略（包括内建函数的实现）。</li>
+</ul>
+</li>
+<li>
+<p><code>-mfpu=...</code> (<code>vfpv4</code> 或 <code>neon-vfpv4</code>)</p>
+<ul>
+<li>指定使用哪个浮点/向量单元指令集：
+<ul>
+<li><code>vfpv4</code>：仅标量浮点指令（适合仅用 FPU 的场景）；</li>
+<li><code>neon-vfpv4</code>：包含 NEON SIMD 指令，编译器可能生成向量化指令以提升性能。</li>
+</ul>
+</li>
+<li><strong>注意</strong>：若使用 <code>neon-vfpv4</code>，需要确保启动代码启用 NEON 并在上下文切换时保存/恢复相应寄存器（否则会崩溃）。</li>
+</ul>
+</li>
+<li>
+<p><code>-mfloat-abi=hard</code></p>
+<ul>
+<li>指定编译器使用硬件浮点 ABI（函数参数通过浮点寄存器传递），需与链接的运行时/库一致（常见于裸机与高性能场景）。</li>
+</ul>
+</li>
+<li>
+<p><code>-ftree-vectorize</code></p>
+<ul>
+<li>启用自动向量化优化（GCC 的树优化阶段），在支持 NEON 时可生成 SIMD 指令加速循环等。</li>
+</ul>
+</li>
+<li>
+<p><code>-ffast-math</code></p>
+<ul>
+<li>放宽 IEEE 浮点标准以允许更激进的浮点优化（可能影响数值精度/异常），通常在追求性能时使用需谨慎。</li>
+</ul>
+</li>
+<li>
+<p><code>-funwind-tables</code></p>
+<ul>
+<li>生成栈展开表以支持异常处理、回溯信息或调试时打印调用栈；也利于 post-mortem 分析。</li>
+</ul>
+</li>
+<li>
+<p><code>-fno-strict-aliasing</code></p>
+<ul>
+<li>关闭严格别名优化，避免编译器基于别名规则重排导致未定义行为（在嵌入式 C 代码里常见指针转换场景）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="cflags用于-c-文件编译">CFLAGS（用于 <code>.c</code> 文件编译）
+</h3><p><code>CFLAGS</code> 在重构版中示例为：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh-keygen -t rsa -b <span class="m">4096</span> -C <span class="s2">&#34;your_email@example.com&#34;</span>
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">CFLAGS = DEVICE + &#39; -ffunction-sections -fdata-sections -Wall -Wno-cpp ... -mno-unaligned-access -D_POSIX_SOURCE&#39;
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>按提示选择路径（默认 <code>~/.ssh/id_rsa</code>）并设置密码（或留空）。</p>
-<p>生成后，执行：</p>
+</div><p>逐条解释：</p>
+<ul>
+<li>
+<p><code>DEVICE</code></p>
+<ul>
+<li>把上面 DEVICE 中的所有通用选项拼接到 C 编译器中。</li>
+</ul>
+</li>
+<li>
+<p><code>-ffunction-sections</code> / <code>-fdata-sections</code></p>
+<ul>
+<li>让每个函数和每个全局变量/常量放到独立的段中（如 <code>.text.func_name</code>、<code>.data.var</code>），方便链接器通过 <code>--gc-sections</code> 丢弃未使用的函数/数据，减小固件体积。</li>
+</ul>
+</li>
+<li>
+<p><code>-Wall</code></p>
+<ul>
+<li>打开一组常见警告，帮助捕获潜在错误。</li>
+</ul>
+</li>
+<li>
+<p><code>-Wno-*</code>（多个）</p>
+<ul>
+<li>关闭特定告警（如 <code>-Wno-unused-variable</code> 等），是为了在较旧或特殊代码库中减少噪音。建议按需缩减，以免屏蔽真正的问题。</li>
+</ul>
+</li>
+<li>
+<p><code>-mno-unaligned-access</code></p>
+<ul>
+<li>禁用非对齐访问（使编译器避免生成非对齐访问指令），某些 ARM SoC 在非对齐访问会产生异常或性能问题。</li>
+</ul>
+</li>
+<li>
+<p><code>-D_POSIX_SOURCE</code></p>
+<ul>
+<li>定义 POSIX 宏，启用 POSIX 兼容性相关声明（如果工程依赖 POSIX 特性）。</li>
+</ul>
+</li>
+<li>
+<p>在 <code>if BUILD == 'debug'</code> 下追加 <code>-O0 -g</code>：</p>
+<ul>
+<li><code>-O0</code>：关闭优化，便于单步调试；</li>
+<li><code>-g</code>：生成 DWARF 调试信息，调试器显示源码、变量名等。</li>
+</ul>
+</li>
+<li>
+<p>在 <code>else</code>（release）下追加 <code>-O2 -fno-schedule-insns2</code>：</p>
+<ul>
+<li><code>-O2</code>：常用的性能优化等级；</li>
+<li><code>-fno-schedule-insns2</code>：关闭 GCC 的第二阶段指令调度（在某些 ARM 平台上可避免因为过度调度导致的浮点或中断问题）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="aflags用于汇编文件-s--s">AFLAGS（用于汇编文件 <code>.S</code> / <code>.s</code>）
+</h3><p><code>AFLAGS</code> 在重构版示例为：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat ~/.ssh/id_rsa.pub
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">AFLAGS = DEVICE + &#39; -ffunction-sections -fdata-sections -x assembler-with-cpp -D__ASSEMBLY__ -c&#39;
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>复制这段 <strong>公钥内容</strong>。</p>
+</div><p>逐条解释：</p>
+<ul>
+<li>
+<p><code>DEVICE</code></p>
+<ul>
+<li>将 <code>-mcpu</code>、<code>-mfpu</code>、<code>-mfloat-abi</code> 等全局选项也应用到汇编编译阶段。注意如果 <code>DEVICE</code> 中使用 <code>neon-vfpv4</code>，则汇编与 C 代码都会可能使用 NEON 指令。</li>
+</ul>
+</li>
+<li>
+<p><code>-ffunction-sections -fdata-sections</code></p>
+<ul>
+<li>虽然对汇编文件影响有限，但保证与 C 文件一致的段布局，有助于链接器精确处理节（section）。</li>
+</ul>
+</li>
+<li>
+<p><code>-x assembler-with-cpp</code></p>
+<ul>
+<li>把源文件当作带 C 预处理器的汇编文件处理，允许在汇编中使用 <code>#include</code>、<code>#ifdef</code> 等预处理指令（常见于 <code>start.S</code>）。</li>
+</ul>
+</li>
+<li>
+<p><code>-D__ASSEMBLY__</code></p>
+<ul>
+<li>在包含头文件时通知其处于汇编上下文，避免将 C 语义代码（如函数声明）纳入汇编中。</li>
+</ul>
+</li>
+<li>
+<p><code>-c</code></p>
+<ul>
+<li>只编译（产出 <code>.o</code>），不链接。</li>
+</ul>
+</li>
+<li>
+<p>在 debug 模式下追加 <code>-g</code></p>
+<ul>
+<li>使 <code>.S</code> 编译的目标文件包含调试符号，便于在汇编层次使用 GDB 单步、断点与反汇编对应源，便于调试启动、异常与上下文切换等底层逻辑。</li>
+</ul>
+</li>
+</ul>
+<h3 id="lflags链接选项">LFLAGS（链接选项）
+</h3><p><code>LFLAGS</code> 示例为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">LFLAGS = DEVICE + &#39; -specs=nosys.specs -Wl,--gc-sections,-Map=rtthread.map,-cref -Wl,-u,system_vectors,--wrap=memcpy -T &#39; + LINK_SCRIPT + &#39; -static -lm&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>逐项说明：</p>
+<ul>
+<li>
+<p><code>DEVICE</code></p>
+<ul>
+<li>把 CPU/FPU 信息告知链接器相关的运行时库选择与内联实现（在某些情况下影响链接器对内建函数的选择）。</li>
+</ul>
+</li>
+<li>
+<p><code>-specs=nosys.specs</code></p>
+<ul>
+<li>使用 <code>nosys.specs</code> 禁用对底层系统调用（syscalls）的默认依赖，适用于裸机/RTOS 环境，避免链接 libc 中需要底层 OS 的部分。</li>
+</ul>
+</li>
+<li>
+<p><code>-Wl,--gc-sections</code></p>
+<ul>
+<li>将 <code>--gc-sections</code> 传给链接器 <code>ld</code>，与 <code>-ffunction-sections</code> / <code>-fdata-sections</code> 配合，删除未使用的代码/数据，减小固件体积。</li>
+</ul>
+</li>
+<li>
+<p><code>-Wl,-Map=rtthread.map,-cref</code></p>
+<ul>
+<li>生成链接 map 文件（<code>rtthread.map</code>），并在 map 中包含交叉引用信息（<code>-cref</code>），方便定位符号与内存布局。</li>
+</ul>
+</li>
+<li>
+<p><code>-Wl,-u,system_vectors</code></p>
+<ul>
+<li>强制链接器将 <code>system_vectors</code> 当作未定义符号（需要被解析），常用于确保中断向量或某些弱符号被链接进来。</li>
+</ul>
+</li>
+<li>
+<p><code>-Wl,--wrap=memcpy</code></p>
+<ul>
+<li>启用链接器对 <code>memcpy</code> 的包装支持（<code>--wrap=symbol</code>），链接器在遇到对 <code>memcpy</code> 的调用时会用 <code>__wrap_memcpy</code> 替代，若需要可以提供替代实现或做跟踪/替换。</li>
+</ul>
+</li>
+<li>
+<p><code>-T link_ram.lds</code></p>
+<ul>
+<li>明确指定链接脚本，告诉链接器如何把段放到物理地址（RAM/FLASH）中。</li>
+</ul>
+</li>
+<li>
+<p><code>-static</code></p>
+<ul>
+<li>静态链接，避免对共享库的依赖（裸机/嵌入式常用）。</li>
+</ul>
+</li>
+<li>
+<p><code>-lm</code></p>
+<ul>
+<li>链接 libm（数学库），若使用数学函数需要该库。</li>
+</ul>
+</li>
+</ul>
+<h3 id="dump_action-与-post_action构建后动作">DUMP_ACTION 与 POST_ACTION（构建后动作）
+</h3><ul>
+<li>
+<p><code>DUMP_ACTION = OBJDUMP + ' -D -S $TARGET &gt; rtthread.asm\n'</code></p>
+<ul>
+<li>在构建后自动对 ELF 进行反汇编并带源代码注释输出到 <code>rtthread.asm</code>，便于审查生成代码。</li>
+</ul>
+</li>
+<li>
+<p><code>POST_ACTION = OBJCPY + ' -O binary $TARGET rtthread.bin\n' + SIZE + ' $TARGET \n'</code></p>
+<ul>
+<li>将 ELF 导出为裸二进制 <code>rtthread.bin</code> 以便烧写，并打印 ELF 大小信息。</li>
+</ul>
+</li>
+</ul>
 <hr>
-<h2 id="-步骤三将-ssh-公钥添加到远程仓库平台如-gitlinkgithubgitee">🔗 步骤三：将 SSH 公钥添加到远程仓库平台（如 GitLink、GitHub、Gitee）
-</h2><p>以 GitLink 为例：</p>
-<ol>
-<li>登录 <a class="link" href="https://gitlink.org.cn"  target="_blank" rel="noopener"
-    >https://gitlink.org.cn</a></li>
-<li>点击右上角头像 → 设置 → SSH公钥</li>
-<li>添加你复制的 <code>id_rsa.pub</code> 内容</li>
+<h2 id="关于浮点单元vfpv4-vs-neon-vfpv4的实践建议回顾">关于浮点单元（<code>vfpv4</code> vs <code>neon-vfpv4</code>）的实践建议（回顾）
+</h2><ol>
+<li>
+<p><strong>默认稳妥方式</strong>：<code> DEVICE</code> 使用 <code>-mfpu=vfpv4 -mfloat-abi=hard</code>。</p>
+<ul>
+<li>优点：语言级浮点运算使用硬件 FPU，避免 NEON 指令带来的上下文开销或未启用问题。</li>
+</ul>
+</li>
+<li>
+<p><strong>如果需要 NEON 加速（全局）</strong>：将 <code>DEVICE</code> 改为 <code>-mfpu=neon-vfpv4 -mfloat-abi=hard</code> 只有在满足以下前提时才安全：</p>
+<ul>
+<li>启动代码（<code>start.S</code>）在早期明确启用 NEON/FPU 单元（设置 CPACR/FPEXC 等寄存器）；</li>
+<li>上下文切换代码保存/恢复 NEON 寄存器（<code>q0–q15</code> / <code>d0–d31</code>）；</li>
+<li>你理解并接受 NEON 指令所带来的堆栈/任务切换开销。</li>
+</ul>
+</li>
+<li>
+<p><strong>折中做法</strong>：保留 <code>DEVICE</code> 为 <code>vfpv4</code>，在需要的汇编文件（如手写优化函数）中单独使用 <code>-mfpu=neon-vfpv4</code>（即在 <code>AFLAGS</code> 或单文件级别覆盖），并在该汇编文件中做必要的寄存器保存/恢复与初始化。</p>
+</li>
 </ol>
 <hr>
-<h2 id="-步骤四修改-git-远程地址为-ssh-格式">🔄 步骤四：修改 Git 远程地址为 SSH 格式
-</h2><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git remote set-url origin git@gitlink.org.cn:nudt_dsp/yourrepo.git
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>再次检查确认：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git remote -v
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输出应变为：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">origin git@gitlink.org.cn:nudt_dsp/yourrepo.git <span class="o">(</span>fetch<span class="o">)</span>
-</span></span><span class="line"><span class="cl">origin git@gitlink.org.cn:nudt_dsp/yourrepo.git <span class="o">(</span>push<span class="o">)</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><hr>
-<h2 id="-步骤五测试是否成功">🧪 步骤五：测试是否成功
-</h2><p>执行：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git push
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>如果你首次用 SSH 会提示确认 <code>gitlink.org.cn</code> 的 host key，输入 <code>yes</code> 即可。之后就不会再提示用户名和密码了。</p>
+<h2 id="常见问题速查faq">常见问题速查（FAQ）
+</h2><ul>
+<li>
+<p><strong>Q：<code>AFLAGS</code> 在 release 模式下完全没用？</strong></p>
+<ul>
+<li>A：不是。<code>AFLAGS</code> 始终用于编译 <code>.S</code> 文件。release 模式只是没有向 <code>AFLAGS</code> 里追加 <code>-g</code>，但 <code>AFLAGS</code> 的默认内容仍然生效。</li>
+</ul>
+</li>
+<li>
+<p><strong>Q：C 文件生成汇编时会用 <code>AFLAGS</code> 吗？</strong></p>
+<ul>
+<li>A：不会。C 编译器内部生成汇编时使用 <code>CFLAGS</code> 控制行为。<code>AFLAGS</code> 只对源文件类型为汇编（<code>.S</code> / <code>.s</code>）时生效。</li>
+</ul>
+</li>
+<li>
+<p><strong>Q：把 <code>DEVICE</code> 里的 <code>-mfpu</code> 改为 <code>neon-vfpv4</code> 直接会导致崩溃？</strong></p>
+<ul>
+<li>A：如果启动/上下文切换代码未做好相应变更，可能导致异常或任务切换破坏。需按建议在启动与上下文中启用/保存 NEON。</li>
+</ul>
+</li>
+</ul>
 <hr>
-<h2 id="-补充可选方式启用-git-凭据缓存仅适用于-https">💡 补充（可选方式）：启用 Git 凭据缓存（仅适用于 HTTPS）
-</h2><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git config --global credential.helper store
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>然后执行一次：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git push
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输入一次用户名和密码后，Git 会将其<strong>明文保存在本地磁盘</strong>（风险较高，不推荐用于公司电脑或公共机）。</p>
+<h2 id="六后续建议可选">六、后续建议（可选）
+</h2><ol>
+<li>在 <code>rtconfig.py</code> 顶部添加注释说明（例如 <code># NOTE: AFLAGS only used for .S files; CFLAGS used for .c files</code>）。</li>
+<li>精简 <code>-Wno-*</code> 列表，仅保留确实需要屏蔽的警告，长期看能发现潜在问题。</li>
+<li>如果决定启用 <code>neon-vfpv4</code> 全局支持，请让我生成一段可插入 <code>start.S</code> 的安全 NEON 启用片段，并提供 <code>context</code> 保存/恢复代码示例。</li>
+</ol>
 <hr>
-<h2 id="-推荐方案总结">✅ 推荐方案总结
-</h2><div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th>方法</th>
-          <th>是否推荐</th>
-          <th>安全性</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>使用 SSH key（推荐）</td>
-          <td>✅ 强烈推荐</td>
-          <td>高</td>
-          <td>一次设置终身免输</td>
-      </tr>
-      <tr>
-          <td>使用 HTTPS + 凭据缓存</td>
-          <td>⚠️ 一般</td>
-          <td>较低</td>
-          <td>明文保存，风险较大</td>
-      </tr>
-      <tr>
-          <td>每次输入用户名密码</td>
-          <td>❌ 不推荐</td>
-          <td>高</td>
-          <td>太麻烦</td>
-      </tr>
-  </tbody>
-</table></div>
-<hr>
-<p>如果你是在公司网络、用的是 Windows、Mac 或 Linux，我可以提供更具体的脚本或配置。需要的话告诉我系统平台即可。</p>
 
 </section>
 
 
     <footer class="article-footer">
     
-    <section class="article-tags">
-        
-            <a href="/tags/markdown/">Markdown</a>
-        
-            <a href="/tags/text/">Text</a>
-        
-            <a href="/tags/tag-with-whitespaces/">Tag With Whitespaces</a>
-        
-    </section>
-
 
     
     <section class="article-copyright">
@@ -575,63 +802,6 @@
     
 
     
-
-<aside class="related-content--wrapper">
-    <h2 class="section-title">相关文章</h2>
-    <div class="related-content">
-        <div class="flex article-list--tile">
-            
-                
-<article class="has-image">
-    <a href="/p/test-chinese/">
-        
-        
-            <div class="article-image">
-                <img src="/p/test-chinese/helena-hertz-wWZzXlDpMog-unsplash.46f61e8ea6a2df8fc5bf1d24a17c44a6_hu_57b7cab9514860c.jpg" 
-                        width="250" 
-                        height="150" 
-                        loading="lazy"
-                        alt="Featured image of post Chinese Test"
-                        data-key="test-chinese" 
-                        data-hash="md5-RvYejqai34/Fvx0koXxEpg==">
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Chinese Test</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="has-image">
-    <a href="/p/emoji-support/">
-        
-        
-            <div class="article-image">
-                <img src="/p/emoji-support/the-creative-exchange-d2zvqp3fpro-unsplash.60116b1ccfc8632e9a65f7d51df3efc2_hu_c1cfd6b8275d624a.jpg" 
-                        width="250" 
-                        height="150" 
-                        loading="lazy"
-                        alt="Featured image of post Emoji Support"
-                        
-                        data-hash="md5-YBFrHM/IYy6aZffVHfPvwg==">
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Emoji Support</h2>
-        </div>
-    </a>
-</article>
-
-            
-        </div>
-    </div>
-</aside>
 
      
     

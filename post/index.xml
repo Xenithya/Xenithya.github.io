@@ -7,7 +7,427 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Xun Yingya</copyright>
-        <lastBuildDate>Fri, 29 Aug 2025 07:51:58 +0000</lastBuildDate><atom:link href="https://xenithya.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 05 Nov 2025 07:50:11 +0000</lastBuildDate><atom:link href="https://xenithya.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Rtconfig_explanation</title>
+        <link>https://xenithya.github.io/p/rtconfig_explanation/</link>
+        <pubDate>Wed, 05 Nov 2025 15:40:47 +0800</pubDate>
+        
+        <guid>https://xenithya.github.io/p/rtconfig_explanation/</guid>
+        <description>&lt;h2 id=&#34;rtconfigpy&#34;&gt;rtconfig.py
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;说明：此文档基于 &lt;code&gt;rtconfig.py&lt;/code&gt; 的整理而成。包含每一项编译参数详解（逐项、逐标志说明）&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;基本元信息&#34;&gt;基本元信息
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;ARCH = &#39;arm&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;表示目标架构为 ARM。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;CPU = &#39;cortex-a15&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;目标 CPU 型号（用于优化与 &lt;code&gt;-mcpu&lt;/code&gt; 指定）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;CROSS_TOOL = &#39;gcc&#39;&lt;/code&gt; / &lt;code&gt;PLATFORM = &#39;gcc&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;指定使用 GCC 家族的交叉工具链（SCons 脚本会据此选择命令模板）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;BUILD = &#39;release&#39;&lt;/code&gt; 或 &lt;code&gt;&#39;debug&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;构建模式开关：&lt;code&gt;debug&lt;/code&gt; 启用符号与低优化；&lt;code&gt;release&lt;/code&gt; 启用高优化、去除调试信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;EXEC_PATH&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;工具链可执行文件目录（例如 &lt;code&gt;arm-none-eabi-gcc&lt;/code&gt; 所在路径）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;工具链命令前缀与命令&#34;&gt;工具链命令前缀与命令
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;PREFIX = &#39;arm-none-eabi-&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;工具链命令的前缀，最后构成 &lt;code&gt;arm-none-eabi-gcc&lt;/code&gt;、&lt;code&gt;arm-none-eabi-ar&lt;/code&gt; 等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;CC = PREFIX + &#39;gcc&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;C/C++ 编译器命令（用于 &lt;code&gt;.c&lt;/code&gt; 编译与链接）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;AS = PREFIX + &#39;gcc&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用 GCC 调用汇编器 (通常用 &lt;code&gt;gcc -x assembler-with-cpp&lt;/code&gt; 去预处理并汇编 &lt;code&gt;.S&lt;/code&gt;)；用 GCC 当作汇编器可以统一参数解析方式。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;AR = PREFIX + &#39;ar&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;归档工具（创建静态库 &lt;code&gt;.a&lt;/code&gt;）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;LINK = PREFIX + &#39;gcc&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;链接器前端，通常用 &lt;code&gt;gcc&lt;/code&gt; 调用 &lt;code&gt;ld&lt;/code&gt;，以便自动添加启动文件和标准库路径（若有）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;SIZE&lt;/code&gt;, &lt;code&gt;OBJDUMP&lt;/code&gt;, &lt;code&gt;OBJCPY&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;SIZE&lt;/code&gt;：打印 ELF 大小；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;OBJDUMP&lt;/code&gt;：反汇编/生成汇编视图；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;OBJCPY&lt;/code&gt;：在编译后导出 &lt;code&gt;.bin&lt;/code&gt;（或其他格式）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;TARGET_EXT = &#39;elf&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;最终目标文件扩展名（ELF）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;LINK_SCRIPT = &#39;link_ram.lds&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;链接脚本文件名，定义内存布局（.text/.data/.bss 等段放置）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;device全局目标体系特性一般拼接到各类-flags&#34;&gt;DEVICE（全局目标/体系特性，一般拼接到各类 flags）
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;DEVICE&lt;/code&gt; 是对 CPU/浮点/编译器行为的集中声明，通常在 &lt;code&gt;CFLAGS/AFLAGS/LFLAGS&lt;/code&gt; 中被复用。我们在重构版中将其写成：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;DEVICE = (
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &amp;#39; -mcpu=cortex-a15&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &amp;#39; -mfpu=neon-vfpv4&amp;#39;   # or &amp;#39;vfpv4&amp;#39; 详见说明
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &amp;#39; -mfloat-abi=hard&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &amp;#39; -ftree-vectorize&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &amp;#39; -ffast-math&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &amp;#39; -funwind-tables&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &amp;#39; -fno-strict-aliasing&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;以下为每个子项逐条解释：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-mcpu=cortex-a15&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;指定目标 CPU，允许编译器生成针对该 CPU 的指令序列与调度策略（包括内建函数的实现）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-mfpu=...&lt;/code&gt; (&lt;code&gt;vfpv4&lt;/code&gt; 或 &lt;code&gt;neon-vfpv4&lt;/code&gt;)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;指定使用哪个浮点/向量单元指令集：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;vfpv4&lt;/code&gt;：仅标量浮点指令（适合仅用 FPU 的场景）；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;neon-vfpv4&lt;/code&gt;：包含 NEON SIMD 指令，编译器可能生成向量化指令以提升性能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;注意&lt;/strong&gt;：若使用 &lt;code&gt;neon-vfpv4&lt;/code&gt;，需要确保启动代码启用 NEON 并在上下文切换时保存/恢复相应寄存器（否则会崩溃）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-mfloat-abi=hard&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;指定编译器使用硬件浮点 ABI（函数参数通过浮点寄存器传递），需与链接的运行时/库一致（常见于裸机与高性能场景）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-ftree-vectorize&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;启用自动向量化优化（GCC 的树优化阶段），在支持 NEON 时可生成 SIMD 指令加速循环等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-ffast-math&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;放宽 IEEE 浮点标准以允许更激进的浮点优化（可能影响数值精度/异常），通常在追求性能时使用需谨慎。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-funwind-tables&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;生成栈展开表以支持异常处理、回溯信息或调试时打印调用栈；也利于 post-mortem 分析。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-fno-strict-aliasing&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;关闭严格别名优化，避免编译器基于别名规则重排导致未定义行为（在嵌入式 C 代码里常见指针转换场景）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;cflags用于-c-文件编译&#34;&gt;CFLAGS（用于 &lt;code&gt;.c&lt;/code&gt; 文件编译）
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;CFLAGS&lt;/code&gt; 在重构版中示例为：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;CFLAGS = DEVICE + &amp;#39; -ffunction-sections -fdata-sections -Wall -Wno-cpp ... -mno-unaligned-access -D_POSIX_SOURCE&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;逐条解释：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;DEVICE&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;把上面 DEVICE 中的所有通用选项拼接到 C 编译器中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-ffunction-sections&lt;/code&gt; / &lt;code&gt;-fdata-sections&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;让每个函数和每个全局变量/常量放到独立的段中（如 &lt;code&gt;.text.func_name&lt;/code&gt;、&lt;code&gt;.data.var&lt;/code&gt;），方便链接器通过 &lt;code&gt;--gc-sections&lt;/code&gt; 丢弃未使用的函数/数据，减小固件体积。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-Wall&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;打开一组常见警告，帮助捕获潜在错误。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-Wno-*&lt;/code&gt;（多个）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;关闭特定告警（如 &lt;code&gt;-Wno-unused-variable&lt;/code&gt; 等），是为了在较旧或特殊代码库中减少噪音。建议按需缩减，以免屏蔽真正的问题。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-mno-unaligned-access&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;禁用非对齐访问（使编译器避免生成非对齐访问指令），某些 ARM SoC 在非对齐访问会产生异常或性能问题。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-D_POSIX_SOURCE&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;定义 POSIX 宏，启用 POSIX 兼容性相关声明（如果工程依赖 POSIX 特性）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在 &lt;code&gt;if BUILD == &#39;debug&#39;&lt;/code&gt; 下追加 &lt;code&gt;-O0 -g&lt;/code&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-O0&lt;/code&gt;：关闭优化，便于单步调试；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-g&lt;/code&gt;：生成 DWARF 调试信息，调试器显示源码、变量名等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在 &lt;code&gt;else&lt;/code&gt;（release）下追加 &lt;code&gt;-O2 -fno-schedule-insns2&lt;/code&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-O2&lt;/code&gt;：常用的性能优化等级；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-fno-schedule-insns2&lt;/code&gt;：关闭 GCC 的第二阶段指令调度（在某些 ARM 平台上可避免因为过度调度导致的浮点或中断问题）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;aflags用于汇编文件-s--s&#34;&gt;AFLAGS（用于汇编文件 &lt;code&gt;.S&lt;/code&gt; / &lt;code&gt;.s&lt;/code&gt;）
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;AFLAGS&lt;/code&gt; 在重构版示例为：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;AFLAGS = DEVICE + &amp;#39; -ffunction-sections -fdata-sections -x assembler-with-cpp -D__ASSEMBLY__ -c&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;逐条解释：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;DEVICE&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;将 &lt;code&gt;-mcpu&lt;/code&gt;、&lt;code&gt;-mfpu&lt;/code&gt;、&lt;code&gt;-mfloat-abi&lt;/code&gt; 等全局选项也应用到汇编编译阶段。注意如果 &lt;code&gt;DEVICE&lt;/code&gt; 中使用 &lt;code&gt;neon-vfpv4&lt;/code&gt;，则汇编与 C 代码都会可能使用 NEON 指令。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-ffunction-sections -fdata-sections&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;虽然对汇编文件影响有限，但保证与 C 文件一致的段布局，有助于链接器精确处理节（section）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-x assembler-with-cpp&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;把源文件当作带 C 预处理器的汇编文件处理，允许在汇编中使用 &lt;code&gt;#include&lt;/code&gt;、&lt;code&gt;#ifdef&lt;/code&gt; 等预处理指令（常见于 &lt;code&gt;start.S&lt;/code&gt;）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-D__ASSEMBLY__&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在包含头文件时通知其处于汇编上下文，避免将 C 语义代码（如函数声明）纳入汇编中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-c&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;只编译（产出 &lt;code&gt;.o&lt;/code&gt;），不链接。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在 debug 模式下追加 &lt;code&gt;-g&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使 &lt;code&gt;.S&lt;/code&gt; 编译的目标文件包含调试符号，便于在汇编层次使用 GDB 单步、断点与反汇编对应源，便于调试启动、异常与上下文切换等底层逻辑。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;lflags链接选项&#34;&gt;LFLAGS（链接选项）
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;LFLAGS&lt;/code&gt; 示例为：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;LFLAGS = DEVICE + &amp;#39; -specs=nosys.specs -Wl,--gc-sections,-Map=rtthread.map,-cref -Wl,-u,system_vectors,--wrap=memcpy -T &amp;#39; + LINK_SCRIPT + &amp;#39; -static -lm&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;逐项说明：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;DEVICE&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;把 CPU/FPU 信息告知链接器相关的运行时库选择与内联实现（在某些情况下影响链接器对内建函数的选择）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-specs=nosys.specs&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 &lt;code&gt;nosys.specs&lt;/code&gt; 禁用对底层系统调用（syscalls）的默认依赖，适用于裸机/RTOS 环境，避免链接 libc 中需要底层 OS 的部分。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-Wl,--gc-sections&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;将 &lt;code&gt;--gc-sections&lt;/code&gt; 传给链接器 &lt;code&gt;ld&lt;/code&gt;，与 &lt;code&gt;-ffunction-sections&lt;/code&gt; / &lt;code&gt;-fdata-sections&lt;/code&gt; 配合，删除未使用的代码/数据，减小固件体积。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-Wl,-Map=rtthread.map,-cref&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;生成链接 map 文件（&lt;code&gt;rtthread.map&lt;/code&gt;），并在 map 中包含交叉引用信息（&lt;code&gt;-cref&lt;/code&gt;），方便定位符号与内存布局。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-Wl,-u,system_vectors&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;强制链接器将 &lt;code&gt;system_vectors&lt;/code&gt; 当作未定义符号（需要被解析），常用于确保中断向量或某些弱符号被链接进来。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-Wl,--wrap=memcpy&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;启用链接器对 &lt;code&gt;memcpy&lt;/code&gt; 的包装支持（&lt;code&gt;--wrap=symbol&lt;/code&gt;），链接器在遇到对 &lt;code&gt;memcpy&lt;/code&gt; 的调用时会用 &lt;code&gt;__wrap_memcpy&lt;/code&gt; 替代，若需要可以提供替代实现或做跟踪/替换。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-T link_ram.lds&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;明确指定链接脚本，告诉链接器如何把段放到物理地址（RAM/FLASH）中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-static&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;静态链接，避免对共享库的依赖（裸机/嵌入式常用）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-lm&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;链接 libm（数学库），若使用数学函数需要该库。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;dump_action-与-post_action构建后动作&#34;&gt;DUMP_ACTION 与 POST_ACTION（构建后动作）
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;DUMP_ACTION = OBJDUMP + &#39; -D -S $TARGET &amp;gt; rtthread.asm\n&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在构建后自动对 ELF 进行反汇编并带源代码注释输出到 &lt;code&gt;rtthread.asm&lt;/code&gt;，便于审查生成代码。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;POST_ACTION = OBJCPY + &#39; -O binary $TARGET rtthread.bin\n&#39; + SIZE + &#39; $TARGET \n&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;将 ELF 导出为裸二进制 &lt;code&gt;rtthread.bin&lt;/code&gt; 以便烧写，并打印 ELF 大小信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;关于浮点单元vfpv4-vs-neon-vfpv4的实践建议回顾&#34;&gt;关于浮点单元（&lt;code&gt;vfpv4&lt;/code&gt; vs &lt;code&gt;neon-vfpv4&lt;/code&gt;）的实践建议（回顾）
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;默认稳妥方式&lt;/strong&gt;：&lt;code&gt; DEVICE&lt;/code&gt; 使用 &lt;code&gt;-mfpu=vfpv4 -mfloat-abi=hard&lt;/code&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;优点：语言级浮点运算使用硬件 FPU，避免 NEON 指令带来的上下文开销或未启用问题。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;如果需要 NEON 加速（全局）&lt;/strong&gt;：将 &lt;code&gt;DEVICE&lt;/code&gt; 改为 &lt;code&gt;-mfpu=neon-vfpv4 -mfloat-abi=hard&lt;/code&gt; 只有在满足以下前提时才安全：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;启动代码（&lt;code&gt;start.S&lt;/code&gt;）在早期明确启用 NEON/FPU 单元（设置 CPACR/FPEXC 等寄存器）；&lt;/li&gt;
+&lt;li&gt;上下文切换代码保存/恢复 NEON 寄存器（&lt;code&gt;q0–q15&lt;/code&gt; / &lt;code&gt;d0–d31&lt;/code&gt;）；&lt;/li&gt;
+&lt;li&gt;你理解并接受 NEON 指令所带来的堆栈/任务切换开销。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;折中做法&lt;/strong&gt;：保留 &lt;code&gt;DEVICE&lt;/code&gt; 为 &lt;code&gt;vfpv4&lt;/code&gt;，在需要的汇编文件（如手写优化函数）中单独使用 &lt;code&gt;-mfpu=neon-vfpv4&lt;/code&gt;（即在 &lt;code&gt;AFLAGS&lt;/code&gt; 或单文件级别覆盖），并在该汇编文件中做必要的寄存器保存/恢复与初始化。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;常见问题速查faq&#34;&gt;常见问题速查（FAQ）
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Q：&lt;code&gt;AFLAGS&lt;/code&gt; 在 release 模式下完全没用？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A：不是。&lt;code&gt;AFLAGS&lt;/code&gt; 始终用于编译 &lt;code&gt;.S&lt;/code&gt; 文件。release 模式只是没有向 &lt;code&gt;AFLAGS&lt;/code&gt; 里追加 &lt;code&gt;-g&lt;/code&gt;，但 &lt;code&gt;AFLAGS&lt;/code&gt; 的默认内容仍然生效。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Q：C 文件生成汇编时会用 &lt;code&gt;AFLAGS&lt;/code&gt; 吗？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A：不会。C 编译器内部生成汇编时使用 &lt;code&gt;CFLAGS&lt;/code&gt; 控制行为。&lt;code&gt;AFLAGS&lt;/code&gt; 只对源文件类型为汇编（&lt;code&gt;.S&lt;/code&gt; / &lt;code&gt;.s&lt;/code&gt;）时生效。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Q：把 &lt;code&gt;DEVICE&lt;/code&gt; 里的 &lt;code&gt;-mfpu&lt;/code&gt; 改为 &lt;code&gt;neon-vfpv4&lt;/code&gt; 直接会导致崩溃？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A：如果启动/上下文切换代码未做好相应变更，可能导致异常或任务切换破坏。需按建议在启动与上下文中启用/保存 NEON。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;六后续建议可选&#34;&gt;六、后续建议（可选）
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;在 &lt;code&gt;rtconfig.py&lt;/code&gt; 顶部添加注释说明（例如 &lt;code&gt;# NOTE: AFLAGS only used for .S files; CFLAGS used for .c files&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;精简 &lt;code&gt;-Wno-*&lt;/code&gt; 列表，仅保留确实需要屏蔽的警告，长期看能发现潜在问题。&lt;/li&gt;
+&lt;li&gt;如果决定启用 &lt;code&gt;neon-vfpv4&lt;/code&gt; 全局支持，请让我生成一段可插入 &lt;code&gt;start.S&lt;/code&gt; 的安全 NEON 启用片段，并提供 &lt;code&gt;context&lt;/code&gt; 保存/恢复代码示例。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
         <title>Sphinx Doxygen</title>
         <link>https://xenithya.github.io/p/sphinx-doxygen/</link>
         <pubDate>Thu, 29 May 2025 10:10:02 +0800</pubDate>
@@ -969,6 +1389,25 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;而不是用 git rm &amp;ndash;cached，否则会导致远程删除。&lt;/p&gt;
 &lt;hr&gt;
+&lt;p&gt;生成一个新的 markdown 文件&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hugo new post/rtconfig_explanation/index.md
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后在 &lt;code&gt;index.md&lt;/code&gt; 中，修改 &lt;code&gt;draft&lt;/code&gt; 参数&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;draft&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
 </description>
         </item>
         <item>
@@ -2178,7 +2617,8 @@
 不告而别的你 就算为了我着想&lt;br&gt;
 这么沉痛的呵护 我怎么能翱翔&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=3aypp_YlBzI&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;最暖的憂傷 - 田馥甄&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;
+    &gt;最暖的憂傷 - 田馥甄&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;h2 id=&#34;图片&#34;&gt;图片
 &lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://xenithya.github.io/p/test-chinese/florian-klauer-nptLmg6jqDo-unsplash.jpg&#34;
 	width=&#34;667&#34;
@@ -2273,11 +2713,13 @@
 &lt;h4 id=&#34;blockquote-without-attribution&#34;&gt;Blockquote without attribution
 &lt;/h4&gt;&lt;blockquote&gt;
 &lt;p&gt;Tiam, ad mint andaepu dandae nostion secatur sequo quae.
-&lt;strong&gt;Note&lt;/strong&gt; that you can use &lt;em&gt;Markdown syntax&lt;/em&gt; within a blockquote.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;strong&gt;Note&lt;/strong&gt; that you can use &lt;em&gt;Markdown syntax&lt;/em&gt; within a blockquote.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;h4 id=&#34;blockquote-with-attribution&#34;&gt;Blockquote with attribution
 &lt;/h4&gt;&lt;blockquote&gt;
 &lt;p&gt;Don&amp;rsquo;t communicate by sharing memory, share memory by communicating.&lt;br&gt;
-— &lt;cite&gt;Rob Pike&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/cite&gt;&lt;/p&gt;&lt;/blockquote&gt;
+— &lt;cite&gt;Rob Pike&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/cite&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;h2 id=&#34;tables&#34;&gt;Tables
 &lt;/h2&gt;&lt;p&gt;Tables aren&amp;rsquo;t part of the core Markdown spec, but Hugo supports supports them out-of-the-box.&lt;/p&gt;
 &lt;table&gt;
