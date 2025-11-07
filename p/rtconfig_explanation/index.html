@@ -10,7 +10,7 @@
 <meta property='og:description' content="rtconfig.py 说明：此文档基于 rtconfig.py 的整理而成。包含每一项编译参数详解（逐项、逐标志说明）\n基本元信息 ARCH = 'arm'\n表示目标架构为 ARM。 CPU = 'cortex-a15'\n目标 CPU 型号（用于优化与 -mcpu 指定）。 CROSS_TOOL = 'gcc' / PLATFORM = 'gcc'\n">
 <meta property='og:url' content='https://xenithya.github.io/p/rtconfig_explanation/'>
 <meta property='og:site_name' content='Xenithya的博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-11-05T15:40:47&#43;08:00'/><meta property='article:modified_time' content='2025-11-05T07:50:11&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-11-05T15:40:47&#43;08:00'/><meta property='article:modified_time' content='2025-11-07T07:22:38&#43;00:00'/>
 <meta name="twitter:title" content="Rtconfig_explanation">
 <meta name="twitter:description" content="rtconfig.py 说明：此文档基于 rtconfig.py 的整理而成。包含每一项编译参数详解（逐项、逐标志说明）\n基本元信息 ARCH = 'arm'\n表示目标架构为 ARM。 CPU = 'cortex-a15'\n目标 CPU 型号（用于优化与 -mcpu 指定）。 CROSS_TOOL = 'gcc' / PLATFORM = 'gcc'\n">
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -276,6 +276,7 @@
         <li><a href="#aflags用于汇编文件-s--s">AFLAGS（用于汇编文件 <code>.S</code> / <code>.s</code>）</a></li>
         <li><a href="#lflags链接选项">LFLAGS（链接选项）</a></li>
         <li><a href="#dump_action-与-post_action构建后动作">DUMP_ACTION 与 POST_ACTION（构建后动作）</a></li>
+        <li><a href="#总结">总结</a></li>
       </ol>
     </li>
     <li><a href="#关于浮点单元vfpv4-vs-neon-vfpv4的实践建议回顾">关于浮点单元（<code>vfpv4</code> vs <code>neon-vfpv4</code>）的实践建议（回顾）</a></li>
@@ -336,7 +337,7 @@
 
 
                 <time>
-                    Nov 05, 2025 07:50 UTC
+                    Nov 07, 2025 07:22 UTC
                 </time>
             </div>
     </footer>
@@ -711,7 +712,22 @@
 </ul>
 </li>
 </ul>
-<hr>
+<h3 id="总结">总结
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Compilation Flags:
+</span></span><span class="line"><span class="cl">arm-none-eabi-gcc <span class="o">[</span>CFLAGS<span class="o">]</span> file.c -o file.o
+</span></span><span class="line"><span class="cl">arm-none-eabi-gcc <span class="o">[</span>AFLAGS<span class="o">]</span> file.S -o file.o
+</span></span><span class="line"><span class="cl">arm-none-eabi-gcc <span class="o">[</span>LFLAGS<span class="o">]</span> *.o -o rtthread-a15.elf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
 <h2 id="关于浮点单元vfpv4-vs-neon-vfpv4的实践建议回顾">关于浮点单元（<code>vfpv4</code> vs <code>neon-vfpv4</code>）的实践建议（回顾）
 </h2><ol>
 <li>
@@ -791,7 +807,7 @@
 
 
         <span>
-            最后更新于 Nov 05, 2025 07:50 UTC
+            最后更新于 Nov 07, 2025 07:22 UTC
         </span>
     </section></footer>
 
