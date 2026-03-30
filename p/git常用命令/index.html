@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn" dir="ltr">
+<html lang="en-us" dir="ltr">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="git 常用命令 初始化 初始化一个仓库并提交\n1 2 3 4 5 6 git init git remote add origin https://gitlink.com/yourusername/repo.git git pull --rebase origin master git push -u origin master # 或 git push -u origin main git config --global user.name &#34;Your Name&#34; git config --global user.email &#34;your@email.com&#34; 合并不相关内容的提交 1 git pull --rebase submodule 下载 下载带有 submodule 的仓库\n">
 <title>Git常用命令</title>
@@ -10,7 +10,7 @@
 <meta property='og:description' content="git 常用命令 初始化 初始化一个仓库并提交\n1 2 3 4 5 6 git init git remote add origin https://gitlink.com/yourusername/repo.git git pull --rebase origin master git push -u origin master # 或 git push -u origin main git config --global user.name &#34;Your Name&#34; git config --global user.email &#34;your@email.com&#34; 合并不相关内容的提交 1 git pull --rebase submodule 下载 下载带有 submodule 的仓库\n">
 <meta property='og:url' content='https://xenithya.github.io/p/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/'>
 <meta property='og:site_name' content='Xenithya的博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-04-25T16:26:50&#43;08:00'/><meta property='article:modified_time' content='2025-12-16T02:49:55&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-04-25T16:26:50&#43;08:00'/><meta property='article:modified_time' content='2026-03-30T02:31:45&#43;00:00'/>
 <meta name="twitter:title" content="Git常用命令">
 <meta name="twitter:description" content="git 常用命令 初始化 初始化一个仓库并提交\n1 2 3 4 5 6 git init git remote add origin https://gitlink.com/yourusername/repo.git git pull --rebase origin master git push -u origin master # 或 git push -u origin main git config --global user.name &#34;Your Name&#34; git config --global user.email &#34;your@email.com&#34; 合并不相关内容的提交 1 git pull --rebase submodule 下载 下载带有 submodule 的仓库\n">
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -58,7 +58,7 @@
                     
                     
                         
-                        <img src="/img/avatar_hu_612b06fbf331ef43.png" width="300"
+                        <img src="/img/avatar_hu_97d69891099aff2d.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -364,7 +364,7 @@
 
 
                 <time>
-                    Dec 16, 2025 02:49 UTC
+                    Mar 30, 2026 02:31 UTC
                 </time>
             </div>
     </footer>
@@ -815,7 +815,24 @@
 <li>这个 commit 里，<code>pnna_driver</code> 和 <code>examples</code> 也固定到对应 tag 的 commit。
 → 完全可复现 ✅。</li>
 </ul>
-<h3 id="2-下载clone-带子模块和-tag-的版本">2️⃣ 下载（clone 带子模块和 tag 的版本）
+<ol start="4">
+<li>普通Tag</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git tag -a v20251205 -m <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;Last release that supports API 1.0.
+</span></span></span><span class="line"><span class="cl"><span class="s2">After this tag, master branch keeps API 2.0 only.&#34;</span>
+</span></span><span class="line"><span class="cl">git push origin v20251205
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2-下载clone-带子模块和-tag-的版本">2️⃣ 下载（clone 带子模块和 tag 的版本）
 </h3><p>用户（或者你自己换电脑）需要获取这个固定版本，只需：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1035,7 +1052,7 @@
 
 
         <span>
-            最后更新于 Dec 16, 2025 02:49 UTC
+            最后更新于 Mar 30, 2026 02:31 UTC
         </span>
     </section></footer>
 
@@ -1056,7 +1073,9 @@
     <section class="copyright">
         &copy; 
         
-        2025 Xun Yingya
+            2025 - 
+        
+        2026 Xun Yingya
     </section>
     
     <section class="powerby">

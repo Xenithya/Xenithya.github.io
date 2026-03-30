@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn" dir="ltr">
+<html lang="en-us" dir="ltr">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="rtconfig.py 说明：此文档基于 rtconfig.py 的整理而成。包含每一项编译参数详解（逐项、逐标志说明）\n基本元信息 ARCH = 'arm'\n表示目标架构为 ARM。 CPU = 'cortex-a15'\n目标 CPU 型号（用于优化与 -mcpu 指定）。 CROSS_TOOL = 'gcc' / PLATFORM = 'gcc'\n">
 <title>Rtconfig_explanation</title>
@@ -10,7 +10,7 @@
 <meta property='og:description' content="rtconfig.py 说明：此文档基于 rtconfig.py 的整理而成。包含每一项编译参数详解（逐项、逐标志说明）\n基本元信息 ARCH = 'arm'\n表示目标架构为 ARM。 CPU = 'cortex-a15'\n目标 CPU 型号（用于优化与 -mcpu 指定）。 CROSS_TOOL = 'gcc' / PLATFORM = 'gcc'\n">
 <meta property='og:url' content='https://xenithya.github.io/p/rtconfig_explanation/'>
 <meta property='og:site_name' content='Xenithya的博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-11-05T15:40:47&#43;08:00'/><meta property='article:modified_time' content='2025-12-16T02:49:55&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-11-05T15:40:47&#43;08:00'/><meta property='article:modified_time' content='2026-03-30T02:31:45&#43;00:00'/>
 <meta name="twitter:title" content="Rtconfig_explanation">
 <meta name="twitter:description" content="rtconfig.py 说明：此文档基于 rtconfig.py 的整理而成。包含每一项编译参数详解（逐项、逐标志说明）\n基本元信息 ARCH = 'arm'\n表示目标架构为 ARM。 CPU = 'cortex-a15'\n目标 CPU 型号（用于优化与 -mcpu 指定）。 CROSS_TOOL = 'gcc' / PLATFORM = 'gcc'\n">
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -58,7 +58,7 @@
                     
                     
                         
-                        <img src="/img/avatar_hu_612b06fbf331ef43.png" width="300"
+                        <img src="/img/avatar_hu_97d69891099aff2d.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -276,6 +276,7 @@
         <li><a href="#aflags用于汇编文件-s--s">AFLAGS（用于汇编文件 <code>.S</code> / <code>.s</code>）</a></li>
         <li><a href="#lflags链接选项">LFLAGS（链接选项）</a></li>
         <li><a href="#dump_action-与-post_action构建后动作">DUMP_ACTION 与 POST_ACTION（构建后动作）</a></li>
+        <li><a href="#内存屏障">内存屏障</a></li>
         <li><a href="#总结">总结</a></li>
       </ol>
     </li>
@@ -337,7 +338,7 @@
 
 
                 <time>
-                    Dec 16, 2025 02:49 UTC
+                    Mar 30, 2026 02:31 UTC
                 </time>
             </div>
     </footer>
@@ -712,7 +713,28 @@
 </ul>
 </li>
 </ul>
-<h3 id="总结">总结
+<h3 id="内存屏障">内存屏障
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#if defined(__x86_64__) || defined(__i386__)
+</span></span></span><span class="line"><span class="cl">    <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;mfence&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;nop 1&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#elif defined(__arm__) || defined(__aarch64__)
+</span></span></span><span class="line"><span class="cl">    <span class="n">__asm__</span> <span class="nf">__volatile__</span><span class="p">(</span><span class="s">&#34;dmb ish&#34;</span><span class="p">);</span>   <span class="c1">// ARM 的内存屏障
+</span></span></span><span class="line"><span class="cl">    <span class="n">__asm__</span> <span class="nf">__volatile__</span><span class="p">(</span><span class="s">&#34;nop&#34;</span><span class="p">);</span>       <span class="c1">// ARM 的空操作
+</span></span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="总结">总结
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -807,7 +829,7 @@
 
 
         <span>
-            最后更新于 Dec 16, 2025 02:49 UTC
+            最后更新于 Mar 30, 2026 02:31 UTC
         </span>
     </section></footer>
 
@@ -828,7 +850,9 @@
     <section class="copyright">
         &copy; 
         
-        2025 Xun Yingya
+            2025 - 
+        
+        2026 Xun Yingya
     </section>
     
     <section class="powerby">
