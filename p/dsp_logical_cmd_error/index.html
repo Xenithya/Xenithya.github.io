@@ -10,7 +10,7 @@
 <meta property='og:description' content="DSP裸机NBG U8类型运行错误 - 深度技术分析与解决方案 一、问题概述 症状 错误日志：[0x0]gcpnna_patch_network_outputs[409], output logical in cmd is NULL, output 1, slice=0 数据类型依赖：仅在U8类型NBG出现，INT16类型正常 平台依赖：仅在DSP裸机出现，RT-Thread操作系统下正常 关键观察 同一代码库，不同数据类型表现不同 同一平台，有/无操作系统表现不同 用户的修复（添加Canary保护）有效解决问题 二、根本原因分析 2.1 结构体定义回顾 1 2 3 4 5 6 7 8 9 10 11 12 13 typedef struct _pnna_io_patch_info { pnna_uint32_t slice_num; // 切片数量 pnna_address_t *logical_in_cmd; // 逻辑地址指针数组 pnna_uint32_t *physical_in_cmd; // 物理地址指针数组 pnna_uint32_t *offsets; // 偏移数组 pnna_uint32_t *transformation; // 变换数组 pnna_uint32_t counter; pnna_uint32_t physical; pnna_uint8_t *logical; pnna_uint8_t **sw_op_buffer; // 软件操作缓冲 pnna_buffer buffer; pnna_uint32_t patch_belong; } gcpnna_io_patch_info_t; 2.2 原有分配代码的问题 位置：gcpnna_create_io_patch_info() 函数 (第1399-1411行)\n">
 <meta property='og:url' content='https://xenithya.github.io/p/dsp_logical_cmd_error/'>
 <meta property='og:site_name' content='Xenithya的博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-12-16T10:46:48&#43;08:00'/><meta property='article:modified_time' content='2026-03-30T02:31:45&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-12-16T10:46:48&#43;08:00'/><meta property='article:modified_time' content='2026-03-31T06:56:31&#43;00:00'/>
 <meta name="twitter:title" content="Dsp_logical_cmd_error">
 <meta name="twitter:description" content="DSP裸机NBG U8类型运行错误 - 深度技术分析与解决方案 一、问题概述 症状 错误日志：[0x0]gcpnna_patch_network_outputs[409], output logical in cmd is NULL, output 1, slice=0 数据类型依赖：仅在U8类型NBG出现，INT16类型正常 平台依赖：仅在DSP裸机出现，RT-Thread操作系统下正常 关键观察 同一代码库，不同数据类型表现不同 同一平台，有/无操作系统表现不同 用户的修复（添加Canary保护）有效解决问题 二、根本原因分析 2.1 结构体定义回顾 1 2 3 4 5 6 7 8 9 10 11 12 13 typedef struct _pnna_io_patch_info { pnna_uint32_t slice_num; // 切片数量 pnna_address_t *logical_in_cmd; // 逻辑地址指针数组 pnna_uint32_t *physical_in_cmd; // 物理地址指针数组 pnna_uint32_t *offsets; // 偏移数组 pnna_uint32_t *transformation; // 变换数组 pnna_uint32_t counter; pnna_uint32_t physical; pnna_uint8_t *logical; pnna_uint8_t **sw_op_buffer; // 软件操作缓冲 pnna_buffer buffer; pnna_uint32_t patch_belong; } gcpnna_io_patch_info_t; 2.2 原有分配代码的问题 位置：gcpnna_create_io_patch_info() 函数 (第1399-1411行)\n">
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -401,7 +401,7 @@
 
 
                 <time>
-                    Mar 30, 2026 02:31 UTC
+                    Mar 31, 2026 06:56 UTC
                 </time>
             </div>
     </footer>
@@ -1130,7 +1130,7 @@
 
 
         <span>
-            最后更新于 Mar 30, 2026 02:31 UTC
+            最后更新于 Mar 31, 2026 06:56 UTC
         </span>
     </section></footer>
 
